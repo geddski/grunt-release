@@ -11,6 +11,12 @@ var shell = require('shelljs');
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
     var options = this.options({
+      bump: true,
+      add: true,
+      commit: true,
+      tag: true,
+      push: true,
+      pushTags: true,
       npm : true
     });
 
@@ -19,12 +25,12 @@ module.exports = function(grunt){
     var previousVersion = pkg.version;
     var newVersion = pkg.version = getNextVersion(previousVersion, type);
 
-    bump();
-    add();
-    commit();
-    tag();
-    push();
-    pushTags();
+    if (options.bump) bump();
+    if (options.add) add();
+    if (options.commit) commit();
+    if (options.tag) tag();
+    if (options.push) push();
+    if (options.pushTags) pushTags();
     if (options.npm) publish();
 
     function add(){

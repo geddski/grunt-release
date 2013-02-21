@@ -1,5 +1,5 @@
 # grunt-release
-[Grunt](http://gruntjs.com) plugin for releasing a new version of a Node library. 
+[Grunt](http://gruntjs.com) plugin for releasing a new version of a library, with optional publishing to npm.  
 
 ## Repetition Killed the Cat
 Releasing a new version of your killer Node lib looks like this:
@@ -18,7 +18,7 @@ Cool, right? No! What's wrong with you? Automate all that:
 grunt release
 ```
 
-Bam.
+Done. No more github issues reminding you how often you forget to do one or more of the steps.
 
 ## Setup
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
@@ -55,20 +55,24 @@ grunt release:major
 ```
 
 ## Options
-If you don't want to publish to npm, add this to your Gruntfile:
+You can disable any of the steps if you want, by adding this to your Gruntfile:
 
 ```js
   release: {
     options: {
+      bump: false,
+      add: false,
+      commit: false,
+      tag: false,
+      push: false,
+      pushTags: false,
       npm: false
     }
   }
 ```
 
-There may be more options in the future.
-
 ## Credits
-Heavily inspired by and some code *borrowed* from Vojta Jina's [grunt-bump](https://github.com/vojtajina/grunt-bump) plugin.
+Inspired by Vojta Jina's [grunt-bump](https://github.com/vojtajina/grunt-bump).
 
 ## License
 MIT
