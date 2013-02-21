@@ -1,27 +1,73 @@
+/*
+ * grunt-release
+ * https://github.com/geddesign/grunt-release
+ *
+ * Copyright (c) 2013 Dave Geddes
+ * Licensed under the MIT license.
+ */
+
 var shell = require('shelljs');
 
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
-    
-    // increment the version
-    var pgkFile = grunt.config('pkgFile') || 'package.json';
-    var pkg = grunt.file.readJSON(pgkFile);
+    var options = this.options({
+      npm : true
+    });
+
+    var pkgFile = grunt.config('pkgFile') || 'package.json';
+    var pkg = grunt.file.readJSON(pkgFile);
     var previousVersion = pkg.version;
-    var newVersion = pkg.version = bumpVersion(previousVersion, type);
+    var newVersion = pkg.version = getNextVersion(previousVersion, type);
 
-    // write updated package.json
-    grunt.file.write(pgkFile, JSON.stringify(pkg, null, '  ') + '\n');
-    grunt.log.ok('Version bumped to ' + newVersion);
-
+    bump();
+    add();
     commit();
+    tag();
+    push();
+    pushTags();
+    if (options.npm) publish();
 
-    function commit(){
-      // commit release
-      shell.exec('git commit ' + pgkFile + ' -m "release v' + newVersion + '"', {silent: false});
-      grunt.log.ok('Changes committed');
+    function add(){
+      run('git add ' + pkgFile);
     }
 
-    function bumpVersion (version, versionType) {
+    function commit(){
+      run('git commit ' + pkgFile + ' -m "release ' + newVersion + '"', pkgFile + ' committed');
+    }
+
+    function tag(){
+      run('git tag ' + newVersion + ' -m "Version ' + newVersion + '"', 'New git tag created: ' + newVersion);
+    }
+
+    function push(){
+      run('git push', 'pushed to github');
+    }
+
+    function pushTags(){
+      run('git push --tags', 'pushed new tag '+ newVersion +' to github');
+    }
+
+    function publish(){
+      run('npm publish', 'published '+ newVersion +' to npm');
+    }
+
+    function run(cmd, msg){
+      shell.exec(cmd, {silent:true});
+      if (msg) grunt.log.ok(msg);
+    }
+
+    function push(){
+      shell.exec('git push');
+      grunt.log.ok('pushed to github');
+    }
+
+    // write updated package.json
+    function bump(){
+      grunt.file.write(pkgFile, JSON.stringify(pkg, null, '  ') + '\n');
+      grunt.log.ok('Version bumped to ' + newVersion);
+    }
+
+    function getNextVersion (version, versionType) {
       var type = {
         patch: 2,
         minor: 1,

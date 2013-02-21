@@ -1,10 +1,12 @@
 module.exports = function(grunt){
 
   grunt.loadTasks('tasks');
-  
-  grunt.initConfig({
-    release: {
 
-    }
+  grunt.initConfig({
+    // release: {
+      // options: {
+        // npm: false
+      // }
+    // }
   });
 };
