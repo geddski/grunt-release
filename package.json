@@ -1,0 +1,31 @@
+{
+  "name": "grunt-release",
+  "version": "0.0.1",
+  "description": "Release a new version of your Node-based project",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geddesign/grunt-release.git"
+  },
+  "keywords": [
+    "gruntplugin",
+    "bump",
+    "release",
+    "npm",
+    "git"
+  ],
+  "author": "Dave Geddes",
+  "license": "MIT",
+  "dependencies": {
+    "shelljs": "~0.1.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.0"
+  }
+}
