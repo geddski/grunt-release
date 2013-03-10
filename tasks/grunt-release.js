@@ -7,6 +7,7 @@
  */
 
 var shell = require('shelljs');
+var semver = require('semver');
 
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
@@ -34,7 +35,7 @@ module.exports = function(grunt){
 
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
-      var newVersion = pkg.version = getNextVersion(pkg.version, type);
+      var newVersion = pkg.version = semver.inc(pkg.version, type || 'patch');
       return {file: file, pkg: pkg, newVersion: newVersion};
     }
 
@@ -77,21 +78,5 @@ module.exports = function(grunt){
       grunt.log.ok('Version bumped to ' + config.newVersion);
     }
 
-    function getNextVersion (version, versionType) {
-      var type = {
-        patch: 2,
-        minor: 1,
-        major: 0
-      };
-
-      var parts = version.split('.');
-      var idx = type[versionType || 'patch'];
-
-      parts[idx] = parseInt(parts[idx], 10) + 1;
-      while(++idx < parts.length) {
-        parts[idx] = 0;
-      }
-      return parts.join('.');
-    };
-  })
+  });
 };

@@ -7,12 +7,12 @@ module.exports = function(grunt){
       options: {
         // bump: true,
         // file: 'test-component.json',
-        // npm: false,
-        // add: true,
+        // add: false,
         // commit: false,
         // tag: false,
         // push: false,
         // pushTags: false,
+        // npm: false,
       }
     }
   });
