@@ -1,5 +1,5 @@
 # grunt-release
-[Grunt](http://gruntjs.com) plugin for releasing a new version of a library, with optional publishing to npm.  
+[Grunt](http://gruntjs.com) plugin for automating all the release steps of your node lib or bower component, with optional publishing to npm.  
 
 ## Repetition Killed the Cat
 Releasing a new version of your killer Node lib looks like this:
@@ -60,16 +60,18 @@ You can disable any of the steps if you want, by adding this to your Gruntfile:
 ```js
   release: {
     options: {
-      bump: false,
-      add: false,
-      commit: false,
-      tag: false,
-      push: false,
-      pushTags: false,
-      npm: false
+      bump: false, //default: true
+      file: 'component.json', //default: package.json
+      add: false, //default: true
+      commit: false, //default: true
+      tag: false, //default: true
+      push: false, //default: true
+      pushTags: false, //default: true
+      npm: false //default: true
     }
   }
 ```
+For node libs, leave `file` option blank. For bower components, set it to `component.json` or whatever you've set your bower config file to be.
 
 ## Credits
 Inspired by Vojta Jina's [grunt-bump](https://github.com/vojtajina/grunt-bump).

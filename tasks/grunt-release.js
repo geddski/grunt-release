@@ -10,8 +10,10 @@ var shell = require('shelljs');
 
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
+    //defaults
     var options = this.options({
       bump: true,
+      file: grunt.config('pkgFile') || 'package.json',
       add: true,
       commit: true,
       tag: true,
@@ -20,41 +22,44 @@ module.exports = function(grunt){
       npm : true
     });
 
-    var pkgFile = grunt.config('pkgFile') || 'package.json';
-    var pkg = grunt.file.readJSON(pkgFile);
-    var previousVersion = pkg.version;
-    var newVersion = pkg.version = getNextVersion(previousVersion, type);
+    var config = setup(options.file, type);
 
-    if (options.bump) bump();
-    if (options.add) add();
-    if (options.commit) commit();
-    if (options.tag) tag();
+    if (options.bump) bump(config);
+    if (options.add) add(config);
+    if (options.commit) commit(config);
+    if (options.tag) tag(config);
     if (options.push) push();
-    if (options.pushTags) pushTags();
-    if (options.npm) publish();
+    if (options.pushTags) pushTags(config);
+    if (options.npm) publish(config);
 
-    function add(){
-      run('git add ' + pkgFile);
+    function setup(file, type){
+      var pkg = grunt.file.readJSON(file);
+      var newVersion = pkg.version = getNextVersion(pkg.version, type);
+      return {file: file, pkg: pkg, newVersion: newVersion};
     }
 
-    function commit(){
-      run('git commit ' + pkgFile + ' -m "release ' + newVersion + '"', pkgFile + ' committed');
+    function add(config){
+      run('git add ' + config.file);
     }
 
-    function tag(){
-      run('git tag ' + newVersion + ' -m "Version ' + newVersion + '"', 'New git tag created: ' + newVersion);
+    function commit(config){
+      run('git commit ' + config.file + ' -m "release ' + config.newVersion + '"', config.file + ' committed');
+    }
+
+    function tag(config){
+      run('git tag ' + config.newVersion + ' -m "Version ' + config.newVersion + '"', 'New git tag created: ' + config.newVersion);
     }
 
     function push(){
       run('git push', 'pushed to github');
     }
 
-    function pushTags(){
-      run('git push --tags', 'pushed new tag '+ newVersion +' to github');
+    function pushTags(config){
+      run('git push --tags', 'pushed new tag '+ config.newVersion +' to github');
     }
 
-    function publish(){
-      run('npm publish', 'published '+ newVersion +' to npm');
+    function publish(config){
+      run('npm publish', 'published '+ config.newVersion +' to npm');
     }
 
     function run(cmd, msg){
@@ -67,10 +72,9 @@ module.exports = function(grunt){
       grunt.log.ok('pushed to github');
     }
 
-    // write updated package.json
-    function bump(){
-      grunt.file.write(pkgFile, JSON.stringify(pkg, null, '  ') + '\n');
-      grunt.log.ok('Version bumped to ' + newVersion);
+    function bump(config){
+      grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
+      grunt.log.ok('Version bumped to ' + config.newVersion);
     }
 
     function getNextVersion (version, versionType) {
