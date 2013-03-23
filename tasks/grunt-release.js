@@ -1,6 +1,6 @@
 /*
  * grunt-release
- * https://github.com/geddesign/grunt-release
+ * https://github.com/geddski/grunt-release
  *
  * Copyright (c) 2013 Dave Geddes
  * Licensed under the MIT license.
