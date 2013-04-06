@@ -23,7 +23,18 @@ module.exports = function(grunt){
       npm : true
     });
 
+    var tagName = grunt.config.getRaw('release.options.tagName') || '<%= version %>';
+    var commitMessage = grunt.config.getRaw('release.options.commitMessage') || 'release <%= version %>';
+    var tagMessage = grunt.config.getRaw('release.options.tagMessage') || 'Version <%= version %>';
+
+    console.log(tagName, commitMessage, tagMessage);
+
     var config = setup(options.file, type);
+    var templateOptions = {
+      data: {
+        version: config.newVersion
+      }
+    };
 
     if (options.bump) bump(config);
     if (options.add) add(config);
@@ -44,11 +55,14 @@ module.exports = function(grunt){
     }
 
     function commit(config){
-      run('git commit ' + config.file + ' -m "release ' + config.newVersion + '"', config.file + ' committed');
+      var message = grunt.template.process(commitMessage, templateOptions);
+      run('git commit '+ config.file +' -m "'+ message +'"', config.file + ' committed');
     }
 
     function tag(config){
-      run('git tag ' + config.newVersion + ' -m "Version ' + config.newVersion + '"', 'New git tag created: ' + config.newVersion);
+      var name = grunt.template.process(tagName, templateOptions);
+      var message = grunt.template.process(tagMessage, templateOptions);
+      run('git tag ' + name + ' -m "'+ message +'"', 'New git tag created: ' + name);
     }
 
     function push(){

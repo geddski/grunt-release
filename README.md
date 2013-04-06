@@ -67,7 +67,10 @@ You can disable any of the steps if you want, by adding this to your Gruntfile:
       tag: false, //default: true
       push: false, //default: true
       pushTags: false, //default: true
-      npm: false //default: true
+      npm: false, //default: true
+      tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
+      commitMessage: 'check out my release <%= version %>', //default: 'release <%= version %>'
+      tagMessage: 'tagging version <%= version %>' //default: 'Version <%= version %>'
     }
   }
 ```
