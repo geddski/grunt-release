@@ -64,7 +64,7 @@ module.exports = function(grunt){
     }
 
     function push(){
-      run('git push', 'pushed to github');
+      run('git push', 'pushed to remote');
     }
 
     function pushTags(config){
