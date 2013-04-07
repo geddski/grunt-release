@@ -44,7 +44,10 @@ module.exports = function(grunt){
 
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
-      var newVersion = pkg.version = semver.inc(pkg.version, type || 'patch');
+      var newVersion = pkg.version;
+      if (options.bump) {
+        newVersion = semver.inc(pkg.version, type || 'patch');
+      }
       return {file: file, pkg: pkg, newVersion: newVersion};
     }
 
