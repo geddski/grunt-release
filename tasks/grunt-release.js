@@ -25,9 +25,7 @@ module.exports = function(grunt){
 
     var tagName = grunt.config.getRaw('release.options.tagName') || '<%= version %>';
     var commitMessage = grunt.config.getRaw('release.options.commitMessage') || 'release <%= version %>';
-    var tagMessage = grunt.config.getRaw('release.options.tagMessage') || 'Version <%= version %>';
-
-    console.log(tagName, commitMessage, tagMessage);
+    var tagMessage = grunt.config.getRaw('release.options.tagMessage') || 'version <%= version %>';
 
     var config = setup(options.file, type);
     var templateOptions = {
