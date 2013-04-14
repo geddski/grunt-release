@@ -71,7 +71,7 @@ module.exports = function(grunt){
     }
 
     function pushTags(config){
-      run('git push --tags', 'pushed new tag '+ config.newVersion +' to github');
+      run('git push --tags', 'pushed new tag '+ config.newVersion +' to remote');
     }
 
     function publish(config){
@@ -85,7 +85,7 @@ module.exports = function(grunt){
 
     function push(){
       shell.exec('git push');
-      grunt.log.ok('pushed to github');
+      grunt.log.ok('pushed to remote');
     }
 
     function bump(config){
