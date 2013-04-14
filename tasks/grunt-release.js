@@ -83,11 +83,6 @@ module.exports = function(grunt){
       if (msg) grunt.log.ok(msg);
     }
 
-    function push(){
-      shell.exec('git push');
-      grunt.log.ok('pushed to remote');
-    }
-
     function bump(config){
       config.pkg.version = config.newVersion;
       grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
