@@ -75,7 +75,10 @@ module.exports = function(grunt){
     }
 
     function publish(config){
-      run('npm publish', 'published '+ config.newVersion +' to npm');
+      var cmd = 'npm publish';
+      if (options.folder){ cmd += ' ' + options.folder }
+      console.log('cmd', cmd);
+      // run(cmd, 'published '+ config.newVersion +' to npm');
     }
 
     function run(cmd, msg){
