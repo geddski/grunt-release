@@ -54,6 +54,11 @@ grunt release:minor
 grunt release:major
 ```
 
+**Dry Run**
+```shell
+grunt --no-write release
+```
+
 ## Options
 You can disable any of the steps if you want, by adding this to your Gruntfile:
 
