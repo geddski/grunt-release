@@ -54,6 +54,15 @@ grunt release:minor
 grunt release:major
 ```
 
+**Pre-release**
+```shell
+grunt release:prerelease
+```
+
+`prerelease` will just update the number after `MAJOR.MINOR.PATCH` (eg: `1.0.0-1`)
+If you want to add an alphanumeric identifier, you will need to add it by hand.
+Example: add `-alpha.0` to get something like `1.0.0-alpha.0`. Calling `grunt release:prerelease` will just update the last number to `1.0.0-alpha.1`.
+
 ## Options
 You can disable any of the steps if you want, by adding this to your Gruntfile:
 
