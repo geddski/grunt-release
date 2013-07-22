@@ -13,7 +13,7 @@ var Q = require('q');
 
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
-    
+
     //defaults
     var options = this.options({
       bump: true,
@@ -42,6 +42,11 @@ module.exports = function(grunt){
     var indentation = grunt.option('indentation') || '  ';
     var task = this;
     var done = this.async();
+
+    if (!config.newVersion) {
+      grunt.warn("Resulting version number is empty.");
+    }
+
 
     if (nowrite){
       grunt.log.ok('-------RELEASE DRY RUN-------');
@@ -93,7 +98,7 @@ module.exports = function(grunt){
       else {
         var success = shell.exec(cmd, {silent:true}).code === 0;
 
-        if (success){ 
+        if (success){
           grunt.log.ok(msg || cmd);
           deferred.resolve();
         }
@@ -131,7 +136,7 @@ module.exports = function(grunt){
       var cmd = 'npm publish';
       var msg = 'published version '+ config.newVersion +' to npm';
       var npmtag = getNpmTag();
-      if (npmtag){ 
+      if (npmtag){
         cmd += ' --tag ' + npmtag;
         msg += ' with a tag of "' + npmtag + '"';
       }
@@ -160,7 +165,7 @@ module.exports = function(grunt){
 
     function githubRelease(){
       var deferred = Q.defer();
-      if (nowrite){ 
+      if (nowrite){
         success();
         return;
       }
@@ -174,7 +179,7 @@ module.exports = function(grunt){
         .end(function(res){
           if (res.statusCode === 201){
             success();
-          } 
+          }
           else {
             deferred.reject('Error creating github release. Response: ' + res.text);
           }
