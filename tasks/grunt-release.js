@@ -86,7 +86,7 @@ module.exports = function(grunt){
         grunt.verbose.writeln('Not actually running: ' + cmd);
       }
       else {
-        grunt.verbose.write('Running: ' + cmd);
+        grunt.verbose.writeln('Running: ' + cmd);
         shell.exec(cmd, {silent:true});
       }
 
