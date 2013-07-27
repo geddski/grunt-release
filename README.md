@@ -54,10 +54,28 @@ grunt release:minor
 grunt release:major
 ```
 
-**Dry Run**
+**Dry Run:**
+
+To see what grunt-release does, without really changing anything, use `--no-write` option.
+
 ```shell
-grunt --no-write release
+grunt --no-write -v release
 ```
+
+You'll see something like:
+```
+Parsing package.json...OK
+Not actually writing package.json...OK
+>> Version bumped to 0.2.6
+Not actually running: git add package.json
+Not actually running: git commit package.json -m "release 0.2.6"
+>> package.json committed
+Not actually running: git tag 0.2.6 -m "version 0.2.6"
+>> New git tag created: 0.2.6
+
+Done, without errors.
+```
+
 
 ## Options
 You can disable any of the steps if you want, by adding this to your Gruntfile:
