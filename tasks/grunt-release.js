@@ -83,7 +83,7 @@ module.exports = function(grunt){
     function run(cmd, msg){
       var nowrite = grunt.option('no-write');
       if (nowrite) {
-        grunt.write('Not actually running: ' + cmd);
+        grunt.verbose.writeln('Not actually running: ' + cmd);
       }
       else {
         grunt.verbose.write('Running: ' + cmd);
