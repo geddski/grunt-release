@@ -15,7 +15,7 @@ module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
 
     //defaults
-    var options = this.options({
+    var options = grunt.util._.extend({
       bump: true,
       // file is in charge of master information, ie, it is it which define the base version to work on
       file: grunt.config('pkgFile') || 'package.json',
@@ -27,7 +27,7 @@ module.exports = function(grunt){
       push: true,
       pushTags: true,
       npm : true
-    });
+    }, grunt.config(this.name).options);
 
     var config = setup(options.file, type);
     var templateOptions = {
@@ -35,9 +35,11 @@ module.exports = function(grunt){
         version: config.newVersion
       }
     };
-    var tagName = grunt.template.process(grunt.config.getRaw('release.options.tagName') || '<%= version %>', templateOptions);
-    var commitMessage = grunt.template.process(grunt.config.getRaw('release.options.commitMessage') || 'release <%= version %>', templateOptions);
-    var tagMessage = grunt.template.process(grunt.config.getRaw('release.options.tagMessage') || 'version <%= version %>', templateOptions);
+
+    var tagName = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagName') || '<%= version %>', templateOptions);
+    var commitMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.commitMessage') || 'release <%= version %>', templateOptions);
+    var tagMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagMessage') || 'version <%= version %>', templateOptions);
+
     var nowrite = grunt.option('no-write');
     var indentation = grunt.option('indentation') || '  ';
     var task = this;
