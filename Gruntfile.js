@@ -1,5 +1,13 @@
 module.exports = function(grunt) {
   grunt.initConfig({
+    bump: true,
+    file: 'package.json',
+    add: true,
+    commit: true,
+    tag: true,
+    push: true,
+    pushTags: true,
+    npm: true,
     clean: {
       test: 'test/fixtures/_component.json'
     },
@@ -8,14 +16,14 @@ module.exports = function(grunt) {
     },
     release: {
       options: {
-        bump: true,
-        file: 'test/fixtures/_component.json',
-        add: false,
-        commit: false,
-        tag: false,
-        push: false,
-        pushTags: false,
-        npm: false
+        bump: '<%= bump %>',
+        file: '<%= file %>',
+        add: '<%= add %>',
+        commit: '<%= commit %>',
+        tag: '<%= tag %>',
+        push: '<%= push %>',
+        pushTags: '<%= pushTags %>',
+        npm: '<%= npm %>'
       }
     },
     setup: {
@@ -38,9 +46,15 @@ module.exports = function(grunt) {
     'clean'
   ]);
 
-  grunt.registerMultiTask('setup', 'Setup fixtures', function(){
+  grunt.registerMultiTask('setup', 'Setup test fixtures', function(){
     this.files.forEach(function(f){
       grunt.file.copy(f.src, f.dest);
     });
+    grunt.config.set('file', 'test/fixtures/_component.json');
+    grunt.config.set('add', false);
+    grunt.config.set('commit', false);
+    grunt.config.set('tag', false);
+    grunt.config.set('pushTags', false);
+    grunt.config.set('npm', false);
   });
 };
