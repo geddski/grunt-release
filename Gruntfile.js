@@ -8,6 +8,8 @@ module.exports = function(grunt) {
     push: true,
     pushTags: true,
     npm: true,
+    npmtag: false,
+    
     clean: {
       test: 'test/fixtures/_component.json'
     },
@@ -23,7 +25,8 @@ module.exports = function(grunt) {
         tag: '<%= tag %>',
         push: '<%= push %>',
         pushTags: '<%= pushTags %>',
-        npm: '<%= npm %>'
+        npm: '<%= npm %>',
+        npmtag: '<%= npmtag %>'
       }
     },
     setup: {
