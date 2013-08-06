@@ -2,7 +2,7 @@
 [Grunt](http://gruntjs.com) plugin for automating all the release steps of your node lib or bower component, with optional publishing to npm.  
 
 ## Repetition Killed the Cat
-Releasing a new version of your killer Node lib looks like this:
+Releasing a new version of your killer Node/Bower/Component/JS lib looks something like this:
 
 1. bump the version in your `package.json` file.
 2. stage the package.json file's change.
@@ -63,6 +63,27 @@ grunt release:prerelease
 If you want to add an alphanumeric identifier, you will need to add it by hand.
 Example: add `-alpha.0` to get something like `1.0.0-alpha.0`. Calling `grunt release:prerelease` will just update the last number to `1.0.0-alpha.1`.
 
+**Releasing Unstable/Beta Versions**
+Sometimes it is useful to publish an 'unstable' or 'beta' version to `npm`, while leaving your last stable release as the default that gets installed on an `npm install`. 
+`npm` accomplishes this using the `--tag myUnstableVersion` flag. You can enable this flag in grunt-release either by setting the `npmtag` option:
+
+```js
+  release: {
+    options: {
+      npmtag: 'canary',
+    }
+  }
+```
+
+or by passing the CLI arg:
+
+```shell
+grunt release --npmtag canary
+```
+
+NOTE: If the tag you pass is **true**, then the tag will be the *new* version number after the bump. Otherwise it will be the string you provided.
+
+
 **Dry Run:**
 To see what grunt-release does, without really changing anything, use `--no-write` option.
 
@@ -98,6 +119,7 @@ You can disable any of the steps if you want, by adding this to your Gruntfile:
       push: false, //default: true
       pushTags: false, //default: true
       npm: false, //default: true
+      npmtag: true, //default: no tag
       folder: 'folder/to/publish/to/npm' //default project root
       tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
       commitMessage: 'check out my release <%= version %>', //default: 'release <%= version %>'
