@@ -81,7 +81,15 @@ module.exports = function(grunt){
     }
 
     function run(cmd, msg){
-      shell.exec(cmd, {silent:true});
+      var nowrite = grunt.option('no-write');
+      if (nowrite) {
+        grunt.verbose.writeln('Not actually running: ' + cmd);
+      }
+      else {
+        grunt.verbose.writeln('Running: ' + cmd);
+        shell.exec(cmd, {silent:true});
+      }
+
       if (msg) grunt.log.ok(msg);
     }
 

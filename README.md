@@ -63,6 +63,27 @@ grunt release:prerelease
 If you want to add an alphanumeric identifier, you will need to add it by hand.
 Example: add `-alpha.0` to get something like `1.0.0-alpha.0`. Calling `grunt release:prerelease` will just update the last number to `1.0.0-alpha.1`.
 
+**Dry Run:**
+To see what grunt-release does, without really changing anything, use `--no-write` option.
+
+```shell
+grunt --no-write -v release
+```
+
+You'll see something like:
+```
+Parsing package.json...OK
+Not actually writing package.json...OK
+>> Version bumped to 0.2.6
+Not actually running: git add package.json
+Not actually running: git commit package.json -m "release 0.2.6"
+>> package.json committed
+Not actually running: git tag 0.2.6 -m "version 0.2.6"
+>> New git tag created: 0.2.6
+
+Done, without errors.
+```
+
 ## Options
 You can disable any of the steps if you want, by adding this to your Gruntfile:
 
