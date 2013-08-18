@@ -154,6 +154,8 @@ The following are all the release steps, you can disable any you need to:
   }
 ```
 
+If you want to use multiline commit messages just pass an array to the `commitMessage` option instead of a string.
+
 ### Notes on Github Releases:
 1. Yes, you have to use environment variables. I would be a terrible person if I let you check in your username and password into your source code.
 2. The [Github Releases API](http://developer.github.com/v3/repos/releases/) is still unstable and may change in the future.
