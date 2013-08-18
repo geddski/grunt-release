@@ -118,8 +118,14 @@ module.exports = function(grunt){
     }
 
     function commit(){
-      var files = config.files.join(' ');
-      return run('git commit '+ files +' -m "'+ commitMessage +'"', 'committed ' + files);
+      if (typeof commitMessage === 'string') {
+        commitMessage = [commitMessage];
+      }
+      var message = commitMessage.map(function(el) {
+        return '-m "' + grunt.template.process(el, templateOptions) + '"';
+      }).join(' ');
+
+      return run('git commit '+ config.file + ' ' + message, config.file + ' committed');
     }
 
     function tag(){
