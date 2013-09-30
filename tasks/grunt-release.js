@@ -116,7 +116,7 @@ module.exports = function(grunt){
 
       if (nowrite){
         grunt.verbose.writeln('Not actually creating github release: ' + tagName);
-        done();
+        success();
       }
 
       request
@@ -126,13 +126,17 @@ module.exports = function(grunt){
         .send({"tag_name": tagName, "name": tagMessage})
         .end(function(res){
           if (res.statusCode === 201){
-            grunt.log.ok('created ' + tagName + ' release on github.');
-            done();
+            success();
           } 
           else {
             grunt.fail.warn('Error creating github release. Response: ' + res.text);
           }
         });
+
+        function success(){
+          grunt.log.ok('created ' + tagName + ' release on github.');
+          done();
+        }
     }
 
   });
