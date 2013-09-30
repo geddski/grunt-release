@@ -106,7 +106,7 @@ Done, without errors.
 ```
 
 ## Options
-You can disable any of the steps if you want, by adding this to your Gruntfile:
+The following are all the release steps, you can disable any you need to:
 
 ```js
   release: {
@@ -123,14 +123,22 @@ You can disable any of the steps if you want, by adding this to your Gruntfile:
       folder: 'folder/to/publish/to/npm' //default project root
       tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
       commitMessage: 'check out my release <%= version %>', //default: 'release <%= version %>'
-      tagMessage: 'tagging version <%= version %>' //default: 'Version <%= version %>'
+      tagMessage: 'tagging version <%= version %>' //default: 'Version <%= version %>',
+      github: { 
+        repo: 'geddski/grunt-release', //put your user/repo here
+        usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username 
+        passwordVar: 'GITHUB_PASSWORD' //ENVIRONMENT VARIABLE that contains Github password
+      }
     }
   }
 ```
-For node libs, leave `file` option blank. For bower components, set it to `component.json` or whatever you've set your bower config file to be.
 
-## Credits
-Inspired by Vojta Jina's [grunt-bump](https://github.com/vojtajina/grunt-bump).
+### Notes on Github Releases:
+1. Yes, you have to use environment variables. I would be a terrible person if I let you check in your username and password into your source code.
+2. The [Github Releases API](http://developer.github.com/v3/repos/releases/) is still unstable and may change in the next couple months or so.
+3. You can use an [access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use) if you'd rather.
+
+For node libs, leave `file` option blank as it will default to `package.json`. For Bower components, set it to `bower.json`.
 
 ## License
 MIT
