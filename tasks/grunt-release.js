@@ -43,6 +43,7 @@ module.exports = function(grunt){
     if (options.push) push();
     if (options.pushTags) pushTags(config);
     if (options.npm) publish(config);
+    if (options.github) githubRelease(config);
 
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
@@ -107,6 +108,31 @@ module.exports = function(grunt){
       config.pkg.version = config.newVersion;
       grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
       grunt.log.ok('Version bumped to ' + config.newVersion);
+    }
+
+    function githubRelease(){
+      var request = require('superagent');
+      var done = task.async();
+
+      if (nowrite){
+        grunt.verbose.writeln('Not actually creating github release: ' + tagName);
+        done();
+      }
+
+      request
+        .post('https://api.github.com/repos/' + options.github.repo + '/releases')
+        .auth(process.env[options.github.usernameVar], process.env[options.github.passwordVar])
+        .set('Accept', 'application/vnd.github.manifold-preview')
+        .send({"tag_name": tagName, "name": tagMessage})
+        .end(function(res){
+          if (res.statusCode === 201){
+            grunt.log.ok('created ' + tagName + ' release on github.');
+            done();
+          } 
+          else {
+            grunt.fail.warn('Error creating github release. Response: ' + res.text);
+          }
+        });
     }
 
   });
