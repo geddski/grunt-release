@@ -1,14 +1,5 @@
 module.exports = function(grunt) {
   grunt.initConfig({
-    bump: true,
-    file: 'package.json',
-    add: true,
-    commit: true,
-    tag: true,
-    push: true,
-    pushTags: true,
-    npm: true,
-    npmtag: false,
     
     clean: {
       test: 'test/fixtures/_component.json'
@@ -18,15 +9,20 @@ module.exports = function(grunt) {
     },
     release: {
       options: {
-        bump: '<%= bump %>',
-        file: '<%= file %>',
-        add: '<%= add %>',
-        commit: '<%= commit %>',
-        tag: '<%= tag %>',
-        push: '<%= push %>',
-        pushTags: '<%= pushTags %>',
-        npm: '<%= npm %>',
-        npmtag: '<%= npmtag %>'
+        bump: true,
+        file: 'package.json',
+        add: true,
+        commit: true,
+        tag: true,
+        push: true,
+        pushTags: true,
+        npm: true,
+        npmtag: false,
+        github: {
+          repo: 'geddski/github-release-spike',
+          usernameVar: 'GITHUB_USERNAME',
+          passwordVar: 'GITHUB_PASSWORD'
+        }
       }
     },
     setup: {
@@ -53,11 +49,12 @@ module.exports = function(grunt) {
     this.files.forEach(function(f){
       grunt.file.copy(f.src, f.dest);
     });
-    grunt.config.set('file', 'test/fixtures/_component.json');
-    grunt.config.set('add', false);
-    grunt.config.set('commit', false);
-    grunt.config.set('tag', false);
-    grunt.config.set('pushTags', false);
-    grunt.config.set('npm', false);
+    grunt.config.set('release.options.file', 'test/fixtures/_component.json');
+    grunt.config.set('release.options.add', false);
+    grunt.config.set('release.options.commit', false);
+    grunt.config.set('release.options.tag', false);
+    grunt.config.set('release.options.pushTags', false);
+    grunt.config.set('release.options.npm', false);
+    grunt.config.set('release.options.github', false);
   });
 };
