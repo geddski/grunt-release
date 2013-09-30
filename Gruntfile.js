@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         npm: true,
         npmtag: false,
         github: {
-          repo: 'geddski/github-release-spike',
+          repo: 'geddski/grunt-release',
           usernameVar: 'GITHUB_USERNAME',
           passwordVar: 'GITHUB_PASSWORD'
         }
