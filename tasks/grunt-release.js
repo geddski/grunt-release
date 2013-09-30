@@ -11,6 +11,7 @@ var semver = require('semver');
 
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
+    
     //defaults
     var options = this.options({
       bump: true,
@@ -23,16 +24,17 @@ module.exports = function(grunt){
       npm : true
     });
 
-    var tagName = grunt.config.getRaw('release.options.tagName') || '<%= version %>';
-    var commitMessage = grunt.config.getRaw('release.options.commitMessage') || 'release <%= version %>';
-    var tagMessage = grunt.config.getRaw('release.options.tagMessage') || 'version <%= version %>';
-
     var config = setup(options.file, type);
     var templateOptions = {
       data: {
         version: config.newVersion
       }
     };
+    var tagName = grunt.template.process(grunt.config.getRaw('release.options.tagName') || '<%= version %>', templateOptions);
+    var commitMessage = grunt.template.process(grunt.config.getRaw('release.options.commitMessage') || 'release <%= version %>', templateOptions);
+    var tagMessage = grunt.template.process(grunt.config.getRaw('release.options.tagMessage') || 'version <%= version %>', templateOptions);
+    var nowrite = grunt.option('no-write');
+    var task = this;
 
     if (options.bump) bump(config);
     if (options.add) add(config);
@@ -56,14 +58,11 @@ module.exports = function(grunt){
     }
 
     function commit(config){
-      var message = grunt.template.process(commitMessage, templateOptions);
-      run('git commit '+ config.file +' -m "'+ message +'"', config.file + ' committed');
+      run('git commit '+ config.file +' -m "'+ commitMessage +'"', config.file + ' committed');
     }
 
     function tag(config){
-      var name = grunt.template.process(tagName, templateOptions);
-      var message = grunt.template.process(tagMessage, templateOptions);
-      run('git tag ' + name + ' -m "'+ message +'"', 'New git tag created: ' + name);
+      run('git tag ' + tagName + ' -m "'+ tagMessage +'"', 'New git tag created: ' + tagName);
     }
 
     function push(){
@@ -93,7 +92,6 @@ module.exports = function(grunt){
     }
 
     function run(cmd, msg){
-      var nowrite = grunt.option('no-write');
       if (nowrite) {
         grunt.verbose.writeln('Not actually running: ' + cmd);
       }
