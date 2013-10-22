@@ -32,6 +32,7 @@ module.exports = function(grunt){
     var config = setup(options.file, type);
     var templateOptions = {
       data: {
+        name: config.pkg.name,
         version: config.newVersion
       }
     };
