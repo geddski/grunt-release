@@ -123,7 +123,7 @@ The following are all the release steps, you can disable any you need to:
       folder: 'folder/to/publish/to/npm', //default project root
       tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
       commitMessage: 'check out my release <%= version %>', //default: 'release <%= version %>'
-      tagMessage: 'tagging version <%= version %>' //default: 'Version <%= version %>',
+      tagMessage: 'tagging version <%= version %>', //default: 'Version <%= version %>',
       github: { 
         repo: 'geddski/grunt-release', //put your user/repo here
         usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username 
