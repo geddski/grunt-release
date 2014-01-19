@@ -123,6 +123,7 @@ module.exports = function(grunt){
         .post('https://api.github.com/repos/' + options.github.repo + '/releases')
         .auth(process.env[options.github.usernameVar], process.env[options.github.passwordVar])
         .set('Accept', 'application/vnd.github.manifold-preview')
+        .set('User-Agent', 'grunt-release')
         .send({"tag_name": tagName, "name": tagMessage})
         .end(function(res){
           if (res.statusCode === 201){
