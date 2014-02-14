@@ -10,7 +10,8 @@ Releasing a new version of your killer Node/Bower/Component/JS lib looks somethi
 4. create a new git tag for the release. 
 5. push the changes out to github.
 6. also push the new tag out to github.
-7. publish the new version to npm.
+7. create a .zip release on github.
+8. publish the new version to npm.
 
 Cool, right? No! What's wrong with you? Automate all that:
 
@@ -18,7 +19,7 @@ Cool, right? No! What's wrong with you? Automate all that:
 grunt release
 ```
 
-Done. No more github issues reminding you how often you forget to do one or more of the steps.
+Done. No more github issues from angry people reminding you how often you forget to do one or more of the steps.
 
 ## Setup
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
@@ -88,19 +89,20 @@ NOTE: If the tag you pass is **true**, then the tag will be the *new* version nu
 To see what grunt-release does, without really changing anything, use `--no-write` option.
 
 ```shell
-grunt --no-write -v release
+grunt release --no-write
 ```
 
 You'll see something like:
 ```
-Parsing package.json...OK
-Not actually writing package.json...OK
->> Version bumped to 0.2.6
-Not actually running: git add package.json
-Not actually running: git commit package.json -m "release 0.2.6"
->> package.json committed
-Not actually running: git tag 0.2.6 -m "version 0.2.6"
->> New git tag created: 0.2.6
+>> -------RELEASE DRY RUN-------
+>> bumped version to 0.8.0
+>> staged package.json
+>> committed package.json
+>> created new git tag: 0.8.0
+>> pushed to remote git repo
+>> pushed new tag 0.8.0 to remote git repo
+>> published version 0.8.0 to npm
+>> created 0.8.0 release on github.
 
 Done, without errors.
 ```
@@ -135,7 +137,7 @@ The following are all the release steps, you can disable any you need to:
 
 ### Notes on Github Releases:
 1. Yes, you have to use environment variables. I would be a terrible person if I let you check in your username and password into your source code.
-2. The [Github Releases API](http://developer.github.com/v3/repos/releases/) is still unstable and may change in the next couple months or so.
+2. The [Github Releases API](http://developer.github.com/v3/repos/releases/) is still unstable and may change in the future.
 3. You can use an [access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use) if you'd rather.
 
 For node libs, leave `file` option blank as it will default to `package.json`. For Bower components, set it to `bower.json`.
