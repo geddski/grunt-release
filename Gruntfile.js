@@ -53,6 +53,7 @@ module.exports = function(grunt) {
     grunt.config.set('release.options.add', false);
     grunt.config.set('release.options.commit', false);
     grunt.config.set('release.options.tag', false);
+    grunt.config.set('release.options.push', false);
     grunt.config.set('release.options.pushTags', false);
     grunt.config.set('release.options.npm', false);
     grunt.config.set('release.options.github', false);
