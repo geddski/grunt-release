@@ -8,6 +8,8 @@
 
 var shell = require('shelljs');
 var semver = require('semver');
+var request = require('superagent');
+var Q = require('q');
 
 module.exports = function(grunt){
   grunt.registerTask('release', 'bump version, git tag, git push, npm publish', function(type){
@@ -35,15 +37,26 @@ module.exports = function(grunt){
     var tagMessage = grunt.template.process(grunt.config.getRaw('release.options.tagMessage') || 'version <%= version %>', templateOptions);
     var nowrite = grunt.option('no-write');
     var task = this;
+    var done = this.async();
 
-    if (options.bump) bump(config);
-    if (options.add) add(config);
-    if (options.commit) commit(config);
-    if (options.tag) tag(config);
-    if (options.push) push();
-    if (options.pushTags) pushTags(config);
-    if (options.npm) publish(config);
-    if (options.github) githubRelease(config);
+    if (nowrite){
+      grunt.log.ok('-------RELEASE DRY RUN-------');
+    }
+
+    Q()
+      .then(ifEnabled('bump', bump))
+      .then(ifEnabled('add', add))
+      .then(ifEnabled('commit', commit))
+      .then(ifEnabled('tag', tag))
+      .then(ifEnabled('push', push))
+      .then(ifEnabled('pushTags', pushTags))
+      .then(ifEnabled('npm', publish))
+      .then(ifEnabled('github', githubRelease))
+      .catch(function(msg){
+        grunt.fail.warn(msg || 'release failed')
+      })
+      .finally(done);
+
 
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
@@ -54,69 +67,85 @@ module.exports = function(grunt){
       return {file: file, pkg: pkg, newVersion: newVersion};
     }
 
-    function add(config){
-      run('git add ' + config.file);
-    }
-
-    function commit(config){
-      run('git commit '+ config.file +' -m "'+ commitMessage +'"', config.file + ' committed');
-    }
-
-    function tag(config){
-      run('git tag ' + tagName + ' -m "'+ tagMessage +'"', 'New git tag created: ' + tagName);
-    }
-
-    function push(){
-      run('git push', 'pushed to remote');
-    }
-
-    function pushTags(config){
-      run('git push --tags', 'pushed new tag '+ config.newVersion +' to remote');
-    }
-
-    function publish(config){
-      var cmd = 'npm publish';
-      var msg = 'published '+ config.newVersion +' to npm';
-      var npmtag = getNpmTag();
-      if (npmtag){ 
-        cmd += ' --tag ' + npmtag;
-        msg += ' with a tag of "' + npmtag + '"';
-      }
-      if (options.folder){ cmd += ' ' + options.folder }
-      run(cmd, msg);
-    }
-
     function getNpmTag(){
       var tag = grunt.option('npmtag') || options.npmtag;
       if(tag === true) { tag = config.newVersion }
       return tag;
     }
 
-    function run(cmd, msg){
-      if (nowrite) {
-        grunt.verbose.writeln('Not actually running: ' + cmd);
-      }
-      else {
-        grunt.verbose.writeln('Running: ' + cmd);
-        shell.exec(cmd, {silent:true});
-      }
-
-      if (msg) grunt.log.ok(msg);
+    function ifEnabled(option, fn){
+      if (options[option]) return fn;
     }
 
-    function bump(config){
-      config.pkg.version = config.newVersion;
-      grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
-      grunt.log.ok('Version bumped to ' + config.newVersion);
+    function run(cmd, msg){
+      var deferred = Q.defer();
+      grunt.verbose.writeln('Running: ' + cmd);
+
+      if (nowrite) {
+        grunt.log.ok(msg || cmd);
+        deferred.resolve();
+      }
+      else {
+        var success = shell.exec(cmd, {silent:true}).code === 0;
+
+        if (success){ 
+          grunt.log.ok(msg || cmd);
+          deferred.resolve();
+        }
+        else{
+          // fail and stop execution of further tasks
+          deferred.reject('Failed when executing: `' + cmd + '`\n');
+        }
+      }
+      return deferred.promise;
+    }
+
+    function add(){
+      return run('git add ' + config.file, ' staged ' + config.file);
+    }
+
+    function commit(){
+      return run('git commit '+ config.file +' -m "'+ commitMessage +'"', 'committed ' + config.file);
+    }
+
+    function tag(){
+      return run('git tag ' + tagName + ' -m "'+ tagMessage +'"', 'created new git tag: ' + tagName);
+    }
+
+    function push(){
+      return run('git push', 'pushed to remote git repo');
+    }
+
+    function pushTags(){
+      return run('git push --tags', 'pushed new tag '+ config.newVersion +' to remote git repo');
+    }
+
+    function publish(){
+      var cmd = 'npm publish';
+      var msg = 'published version '+ config.newVersion +' to npm';
+      var npmtag = getNpmTag();
+      if (npmtag){ 
+        cmd += ' --tag ' + npmtag;
+        msg += ' with a tag of "' + npmtag + '"';
+      }
+      if (options.folder){ cmd += ' ' + options.folder }
+      return run(cmd, msg);
+    }
+
+
+    function bump(){
+      return Q.fcall(function () {
+        config.pkg.version = config.newVersion;
+        grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
+        grunt.log.ok('bumped version to ' + config.newVersion);
+      });
     }
 
     function githubRelease(){
-      var request = require('superagent');
-      var done = task.async();
-
-      if (nowrite){
-        grunt.verbose.writeln('Not actually creating github release: ' + tagName);
+      var deferred = Q.defer();
+      if (nowrite){ 
         success();
+        return;
       }
 
       request
@@ -130,14 +159,16 @@ module.exports = function(grunt){
             success();
           } 
           else {
-            grunt.fail.warn('Error creating github release. Response: ' + res.text);
+            deferred.reject('Error creating github release. Response: ' + res.text);
           }
         });
 
-        function success(){
-          grunt.log.ok('created ' + tagName + ' release on github.');
-          done();
-        }
+      function success(){
+        grunt.log.ok('created ' + tagName + ' release on github.');
+        deferred.resolve();
+      }
+
+      return deferred.promise;
     }
 
   });
