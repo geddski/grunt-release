@@ -122,6 +122,7 @@ The following are all the release steps, you can disable any you need to:
       pushTags: false, //default: true
       npm: false, //default: true
       npmtag: true, //default: no tag
+      indentation: '\t', //default: '  ' (two spaces)
       folder: 'folder/to/publish/to/npm', //default project root
       tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
       commitMessage: 'check out my release <%= version %>', //default: 'release <%= version %>'
