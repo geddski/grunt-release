@@ -36,6 +36,7 @@ module.exports = function(grunt){
     var commitMessage = grunt.template.process(grunt.config.getRaw('release.options.commitMessage') || 'release <%= version %>', templateOptions);
     var tagMessage = grunt.template.process(grunt.config.getRaw('release.options.tagMessage') || 'version <%= version %>', templateOptions);
     var nowrite = grunt.option('no-write');
+    var indentation = grunt.option('indentation') || '  ';
     var task = this;
     var done = this.async();
 
@@ -136,7 +137,7 @@ module.exports = function(grunt){
     function bump(){
       return Q.fcall(function () {
         config.pkg.version = config.newVersion;
-        grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
+        grunt.file.write(config.file, JSON.stringify(config.pkg, null, indentation) + '\n');
         grunt.log.ok('bumped version to ' + config.newVersion);
       });
     }
