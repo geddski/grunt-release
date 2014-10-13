@@ -2,7 +2,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     
     clean: {
-      test: 'test/fixtures/_component.json'
+      test: 'test/fixtures/_*.json'
     },
     nodeunit: {
       tests: 'test/release_test.js'
@@ -27,8 +27,13 @@ module.exports = function(grunt) {
     },
     setup: {
       test: {
-        src: 'test/fixtures/component.json',
-        dest: 'test/fixtures/_component.json'
+        files: [{
+          src: 'test/fixtures/component.json',
+          dest: 'test/fixtures/_component.json'
+        },{
+          src: 'test/fixtures/bower.json',
+          dest: 'test/fixtures/_bower.json'
+        }]
       }
     }
   });
@@ -57,5 +62,6 @@ module.exports = function(grunt) {
     grunt.config.set('release.options.pushTags', false);
     grunt.config.set('release.options.npm', false);
     grunt.config.set('release.options.github', false);
+    grunt.config.set('release.options.additionalFiles', ['test/fixtures/_bower.json']);
   });
 };
