@@ -17,7 +17,10 @@ module.exports = function(grunt){
     //defaults
     var options = this.options({
       bump: true,
+      // file is in charge of master information, ie, it is it which define the base version to work on
       file: grunt.config('pkgFile') || 'package.json',
+      // additionalFiles are additional files that also need to be bumped
+      additionalFiles: [],
       add: true,
       commit: true,
       tag: true,
@@ -65,7 +68,8 @@ module.exports = function(grunt){
       if (options.bump) {
         newVersion = semver.inc(pkg.version, type || 'patch');
       }
-      return {file: file, pkg: pkg, newVersion: newVersion};
+      options.additionalFiles.push(file);
+      return {files: options.additionalFiles, newVersion: newVersion};
     }
 
     function getNpmTag(){
@@ -102,11 +106,13 @@ module.exports = function(grunt){
     }
 
     function add(){
-      return run('git add ' + config.file, ' staged ' + config.file);
+      var files = config.files.join(' ');
+      return run('git add ' + files, ' staged ' + files);
     }
 
     function commit(){
-      return run('git commit '+ config.file +' -m "'+ commitMessage +'"', 'committed ' + config.file);
+      var files = config.files.join(' ');
+      return run('git commit '+ files +' -m "'+ commitMessage +'"', 'committed ' + files);
     }
 
     function tag(){
@@ -135,11 +141,21 @@ module.exports = function(grunt){
 
 
     function bump(){
-      return Q.fcall(function () {
-        config.pkg.version = config.newVersion;
-        grunt.file.write(config.file, JSON.stringify(config.pkg, null, indentation) + '\n');
-        grunt.log.ok('bumped version to ' + config.newVersion);
-      });
+      var i, l, file, pkg, promise;
+      var promises = [];
+      for (i = 0, l = config.files.length ; i < l ; i++) {
+        file = config.files[i];
+        promise = (function(file){
+          return Q.fcall(function () {
+            pkg = grunt.file.readJSON(file);
+            pkg.version = config.newVersion;
+            grunt.file.write(file, JSON.stringify(pkg, null, indentation) + '\n');
+            grunt.log.ok('bumped version of ' + file + ' to ' + config.newVersion);
+          });
+        }(file));
+        promises.push(promise);
+      }
+      return Q.all(promises);
     }
 
     function githubRelease(){

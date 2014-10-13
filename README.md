@@ -87,6 +87,22 @@ grunt release --npmtag canary
 NOTE: If the tag you pass is **true**, then the tag will be the *new* version number after the bump. Otherwise it will be the string you provided.
 
 
+**Bump multuple files at once**
+
+Sometimes you may need to bump multiple files while releasing.
+
+```js
+  release: {
+    options: {
+      additionalFiles: 'bower.json',
+    }
+  }
+```
+
+The version to bump is set in the master file defined with otpion 'file' (default : package.json).
+This version will be propagated to every additionalFiles.
+
+
 **Dry Run:**
 To see what grunt-release does, without really changing anything, use `--no-write` option.
 

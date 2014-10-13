@@ -9,5 +9,11 @@ exports.release = {
     test.equal(actual.version, expected.version, 'should set version 0.0.13');
 
     test.done();
+  },
+  bumpMultiple: function(test){
+    var actual = grunt.file.readJSON('test/fixtures/_bower.json');
+    var expected = grunt.file.readJSON('test/expected/bower.json');
+    test.equal(actual.version, expected.version, 'bower.json should also have version 0.0.13');
+    test.done();
   }
 };
