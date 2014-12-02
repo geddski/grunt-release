@@ -18,4 +18,3 @@
 * bump multiple files at once (fixes geddski/grunt-release#90, geddski/grunt-release#91)
 
 ### v0.7.0 and older release
-
