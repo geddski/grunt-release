@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Update node modules to current version
 * Add TravisCI configuration
 
 ### v0.8.1 - 2014-12-02
