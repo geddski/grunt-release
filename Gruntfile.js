@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
+  'use strict';
+
   grunt.initConfig({
-    
+
     clean: {
       test: 'test/fixtures/_*.json'
     },
