@@ -23,18 +23,17 @@
   "author": "Dave Geddes",
   "license": "MIT",
   "dependencies": {
-    "shelljs": "~0.3.0",
-    "semver": "~4.1.0",
-    "superagent": "~0.21.0",
-    "q": "~1.1.2"
+    "shelljs": "^0.3.0",
+    "semver": "^4.1.0",
+    "superagent": "^0.21.0",
+    "q": "^1.1.2"
   },
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt": "~0.4.5",
-    "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-clean": "~0.6.0"
+    "grunt": "^0.4.5",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-clean": "^0.6.0"
   },
   "peerDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "^0.4.1"
   }
 }
