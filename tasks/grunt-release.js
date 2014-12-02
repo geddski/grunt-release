@@ -26,7 +26,8 @@ module.exports = function(grunt){
       tag: true,
       push: true,
       pushTags: true,
-      npm : true
+      npm : true,
+      remote: "origin"
     }, grunt.config(this.name).options);
 
     var config = setup(options.file, type);
@@ -82,7 +83,7 @@ module.exports = function(grunt){
 
     function getNpmTag(){
       var tag = grunt.option('npmtag') || options.npmtag;
-      if(tag === true) { tag = config.newVersion }
+      if(tag === true) { tag = config.newVersion; }
       return tag;
     }
 
@@ -134,11 +135,11 @@ module.exports = function(grunt){
     }
 
     function push(){
-      return run('git push', 'pushed to remote git repo');
+      run('git push ' + config.remote + ' HEAD', 'pushed to remote');
     }
 
-    function pushTags(){
-      return run('git push --tags', 'pushed new tag '+ config.newVersion +' to remote git repo');
+    function pushTags(config){
+      run('git push ' + config.remote + ' ' + tagName, 'pushed new tag '+ config.newVersion +' to remote');
     }
 
     function publish(){
@@ -149,10 +150,10 @@ module.exports = function(grunt){
         cmd += ' --tag ' + npmtag;
         msg += ' with a tag of "' + npmtag + '"';
       }
-      if (options.folder){ cmd += ' ' + options.folder }
+
+      if (options.folder){ cmd += ' ' + options.folder; }
       return run(cmd, msg);
     }
-
 
     function bump(){
       var i, l, file, pkg, promise;
