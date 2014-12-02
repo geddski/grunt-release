@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Add .jshintrc and .editorconfig
 * Update node modules to current version
 * Add TravisCI configuration
 
