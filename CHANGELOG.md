@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Fix bugs related to `additionalFiles` option
 * Fix JSHint errors in task
 * Add .jshintrc and .editorconfig
 * Update node modules to current version
