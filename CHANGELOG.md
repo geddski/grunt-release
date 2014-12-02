@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ### HEAD
-
+* Features/tag push specificity
 * Add package.json/component.json name to templateData for messages.
 * Add support for multiline commit messages
 * Support renamed tasks
