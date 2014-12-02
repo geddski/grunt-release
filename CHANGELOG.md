@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Add TravisCI configuration
 
 ### v0.8.1 - 2014-12-02
 * Fix reference to package name in task configuration
