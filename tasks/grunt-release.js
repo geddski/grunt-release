@@ -18,11 +18,58 @@ module.exports = function(grunt){
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
       var newVersion = pkg.version;
+
       if (options.bump) {
         newVersion = semver.inc(pkg.version, type || 'patch');
       }
+
       options.additionalFiles.push(file);
-      return {files: options.additionalFiles, newVersion: newVersion};
+
+      return {
+        files: options.additionalFiles,
+        newVersion: newVersion,
+        pkg: pkg
+      };
+    }
+
+    // Defaults
+    var options = grunt.util._.extend({
+      bump: true,
+      // file is in charge of master information, ie, it is it which define the base version to work on
+      file: grunt.config('pkgFile') || 'package.json',
+      // additionalFiles are additional files that also need to be bumped
+      additionalFiles: [],
+      add: true,
+      commit: true,
+      tag: true,
+      push: true,
+      pushTags: true,
+      npm : true,
+      remote: 'origin'
+    }, grunt.config(this.name).options);
+
+    var config = setup(options.file, type);
+    var templateOptions = {
+      data: {
+        name: config.name || '',
+        version: config.newVersion
+      }
+    };
+
+    var tagName = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagName') || '<%= version %>', templateOptions);
+    var commitMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.commitMessage') || 'release <%= version %>', templateOptions);
+    var tagMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagMessage') || 'version <%= version %>', templateOptions);
+
+    var nowrite = grunt.option('no-write');
+    var indentation = grunt.option('indentation') || '  ';
+    var done = this.async();
+
+    if (!config.newVersion) {
+      grunt.warn("Resulting version number is empty.");
+    }
+
+    if (nowrite){
+      grunt.log.ok('-------RELEASE DRY RUN-------');
     }
 
     function getNpmTag(){
@@ -77,7 +124,7 @@ module.exports = function(grunt){
         return '-m "' + grunt.template.process(el, templateOptions) + '"';
       }).join(' ');
 
-      return run('git commit '+ config.file + ' ' + message, config.file + ' committed');
+      return run('git commit ' + message, config.file + ' committed');
     }
 
     function tag(){
@@ -85,11 +132,11 @@ module.exports = function(grunt){
     }
 
     function push(){
-      run('git push ' + config.remote + ' HEAD', 'pushed to remote');
+      run('git push ' + options.remote + ' HEAD', 'pushed to remote');
     }
 
-    function pushTags(config){
-      run('git push ' + config.remote + ' ' + tagName, 'pushed new tag '+ config.newVersion +' to remote');
+    function pushTags(){
+      run('git push ' + options.remote + ' ' + tagName, 'pushed new tag '+ config.newVersion +' to remote');
     }
 
     function publish(){
@@ -106,9 +153,9 @@ module.exports = function(grunt){
     }
 
     function bump(){
-      var i, l, file, pkg, promise;
+      var i, file, pkg, promise;
       var promises = [];
-      for (i = 0, l = config.files.length ; i < l ; i++) {
+      for (i = 0; i < config.files.length; i++) {
         file = config.files[i];
         promise = (function(file){
           return Q.fcall(function () {
@@ -153,48 +200,6 @@ module.exports = function(grunt){
 
       return deferred.promise;
     }
-
-    // Defaults
-    var options = grunt.util._.extend({
-      bump: true,
-      // file is in charge of master information, ie, it is it which define the base version to work on
-      file: grunt.config('pkgFile') || 'package.json',
-      // additionalFiles are additional files that also need to be bumped
-      additionalFiles: [],
-      add: true,
-      commit: true,
-      tag: true,
-      push: true,
-      pushTags: true,
-      npm : true,
-      remote: "origin"
-    }, grunt.config(this.name).options);
-
-
-    var config = setup(options.file, type);
-    var templateOptions = {
-      data: {
-        name: options.file.name,
-        version: config.newVersion
-      }
-    };
-
-    var tagName = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagName') || '<%= version %>', templateOptions);
-    var commitMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.commitMessage') || 'release <%= version %>', templateOptions);
-    var tagMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagMessage') || 'version <%= version %>', templateOptions);
-
-    var nowrite = grunt.option('no-write');
-    var indentation = grunt.option('indentation') || '  ';
-    var done = this.async();
-
-    if (!config.newVersion) {
-      grunt.warn("Resulting version number is empty.");
-    }
-
-    if (nowrite){
-      grunt.log.ok('-------RELEASE DRY RUN-------');
-    }
-
 
     new Q()
       .then(ifEnabled('bump', bump))
