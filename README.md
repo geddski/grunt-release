@@ -1,4 +1,9 @@
 # grunt-release
+
+[![Build Status](https://travis-ci.org/drublic/grunt-release.svg?branch=master)](https://travis-ci.org/drublic/grunt-release)
+[![Dependency Status](https://david-dm.org/drublic/grunt-release.svg)](https://david-dm.org/drublic/grunt-release)
+[![devDependency Status](https://david-dm.org/drublic/grunt-release/dev-status.svg)](https://david-dm.org/drublic/grunt-release#info=devDependencies)
+
 [Grunt](http://gruntjs.com) plugin for automating all the release steps of your node lib or bower component, with optional publishing to npm.
 
 This is a fork of https://github.com/geddski/grunt-release.
