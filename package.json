@@ -6,6 +6,9 @@
   "scripts": {
     "test": "grunt test"
   },
+  "engines": {
+    "node": ">=0.10"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/geddski/grunt-release.git"
