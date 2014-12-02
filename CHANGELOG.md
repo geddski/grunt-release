@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Fix reference to package name in task configuration
 
 ### v0.8.0 - 2014-12-02
 * Features/tag push specificity (geddski/grunt-release#55)
