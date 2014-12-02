@@ -1,5 +1,7 @@
 # grunt-release
-[Grunt](http://gruntjs.com) plugin for automating all the release steps of your node lib or bower component, with optional publishing to npm.  
+[Grunt](http://gruntjs.com) plugin for automating all the release steps of your node lib or bower component, with optional publishing to npm.
+
+This is a fork of https://github.com/geddski/grunt-release.
 
 ## Repetition Killed the Cat
 Releasing a new version of your killer Node/Bower/Component/JS lib looks something like this:
@@ -7,7 +9,7 @@ Releasing a new version of your killer Node/Bower/Component/JS lib looks somethi
 1. bump the version in your `package.json` file.
 2. stage the package.json file's change.
 3. commit that change with a message like "release 0.6.22".
-4. create a new git tag for the release. 
+4. create a new git tag for the release.
 5. push the changes out to github.
 6. also push the new tag out to github.
 7. create a .zip release on github.
@@ -65,7 +67,7 @@ If you want to add an alphanumeric identifier, you will need to add it by hand.
 Example: add `-alpha.0` to get something like `1.0.0-alpha.0`. Calling `grunt release:prerelease` will just update the last number to `1.0.0-alpha.1`.
 
 **Releasing Unstable/Beta Versions**
-Sometimes it is useful to publish an 'unstable' or 'beta' version to `npm`, while leaving your last stable release as the default that gets installed on an `npm install`. 
+Sometimes it is useful to publish an 'unstable' or 'beta' version to `npm`, while leaving your last stable release as the default that gets installed on an `npm install`.
 `npm` accomplishes this using the `--tag myUnstableVersion` flag. You can enable this flag in grunt-release either by setting the `npmtag` option:
 
 ```js
@@ -127,9 +129,9 @@ The following are all the release steps, you can disable any you need to:
       tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
       commitMessage: 'check out my release <%= version %>', //default: 'release <%= version %>'
       tagMessage: 'tagging version <%= version %>', //default: 'Version <%= version %>',
-      github: { 
+      github: {
         repo: 'geddski/grunt-release', //put your user/repo here
-        usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username 
+        usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
         passwordVar: 'GITHUB_PASSWORD' //ENVIRONMENT VARIABLE that contains Github password
       }
     }
