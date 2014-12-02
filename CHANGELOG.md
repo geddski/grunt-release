@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ### HEAD
+
+### v0.9.0 - 2014-12-02
 * Fix bugs related to `additionalFiles` option
 * Fix JSHint errors in task
 * Add .jshintrc and .editorconfig
