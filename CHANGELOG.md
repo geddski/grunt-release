@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ### HEAD
-
+* Prevent message when committing from stating `undefined`
 * Capitalize task description
 
 ### v0.9.0 - 2014-12-02

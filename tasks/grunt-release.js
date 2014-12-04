@@ -124,7 +124,7 @@ module.exports = function(grunt){
         return '-m "' + grunt.template.process(el, templateOptions) + '"';
       }).join(' ');
 
-      return run('git commit ' + message, config.file + ' committed');
+      return run('git commit ' + message, 'Committed all files');
     }
 
     function tag(){
