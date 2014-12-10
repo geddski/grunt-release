@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Fix `Cannot read property 'options' of undefined`
 * Prevent message when committing from stating `undefined`
 * Capitalize task description
 

@@ -46,7 +46,7 @@ module.exports = function(grunt){
       pushTags: true,
       npm : true,
       remote: 'origin'
-    }, grunt.config(this.name).options);
+    }, (grunt.config(this.name) || {}).options);
 
     var config = setup(options.file, type);
     var templateOptions = {
