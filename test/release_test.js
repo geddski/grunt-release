@@ -1,3 +1,5 @@
+'use strict';
+
 var grunt = require('grunt');
 
 exports.release = {
@@ -14,6 +16,12 @@ exports.release = {
     var actual = grunt.file.readJSON('test/fixtures/_bower.json');
     var expected = grunt.file.readJSON('test/expected/bower.json');
     test.equal(actual.version, expected.version, 'bower.json should also have version 0.0.13');
+    test.done();
+  },
+  bumpChangelog: function(test){
+    var actual = grunt.file.read('test/fixtures/_CHANGELOG.md');
+    var expected = grunt.file.read('test/expected/CHANGELOG.md');
+    test.equal(actual, expected, 'CHANGELOG.md should be updated');
     test.done();
   }
 };

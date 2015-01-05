@@ -35,8 +35,14 @@ module.exports = function(grunt){
     // Defaults
     var options = grunt.util._.extend({
       bump: true,
+      changelog: false, // Update changelog file
+
+      // Text which is inserted into change log
+      changelogText: '### <%= version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n',
+
       // file is in charge of master information, ie, it is it which define the base version to work on
       file: grunt.config('pkgFile') || 'package.json',
+
       // additionalFiles are additional files that also need to be bumped
       additionalFiles: [],
       add: true,
@@ -44,18 +50,17 @@ module.exports = function(grunt){
       tag: true,
       push: true,
       pushTags: true,
-      npm : true,
+      npm: true,
       remote: 'origin'
-    }, (grunt.config(this.name) || {}).options);
-
+    }, (grunt.config.data[this.name] || {}).options);
     var config = setup(options.file, type);
+
     var templateOptions = {
       data: {
         name: config.name || '',
         version: config.newVersion
       }
     };
-
     var tagName = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagName') || '<%= version %>', templateOptions);
     var commitMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.commitMessage') || 'release <%= version %>', templateOptions);
     var tagMessage = grunt.template.process(grunt.config.getRaw(this.name + '.options.tagMessage') || 'version <%= version %>', templateOptions);
@@ -65,11 +70,11 @@ module.exports = function(grunt){
     var done = this.async();
 
     if (!config.newVersion) {
-      grunt.warn("Resulting version number is empty.");
+      grunt.warn('Resulting version number is empty.');
     }
 
     if (nowrite){
-      grunt.log.ok('-------RELEASE DRY RUN-------');
+      grunt.log.ok('Release dry run.');
     }
 
     function getNpmTag(){
@@ -108,6 +113,25 @@ module.exports = function(grunt){
         }
       }
       return deferred.promise;
+    }
+
+    function changelog(){
+      var filename = options.changelog;
+
+      // Default filename
+      if(options.changelog === true) {
+        filename = 'CHANGELOG.md';
+      }
+
+      config.files.push(filename);
+
+      return Q.fcall(function () {
+        var changelogText = grunt.template.process(options.changelogText, templateOptions);
+        var changelogContent = changelogText + grunt.file.read(filename);
+
+        grunt.file.write(filename, changelogContent);
+        grunt.log.ok('Changelog ' + filename + ' updated');
+      });
     }
 
     function add(){
@@ -203,6 +227,7 @@ module.exports = function(grunt){
 
     new Q()
       .then(ifEnabled('bump', bump))
+      .then(ifEnabled('changelog', changelog))
       .then(ifEnabled('add', add))
       .then(ifEnabled('commit', commit))
       .then(ifEnabled('tag', tag))
@@ -214,7 +239,6 @@ module.exports = function(grunt){
         grunt.fail.warn(msg || 'release failed');
       })
       .finally(done);
-
 
   });
 

@@ -115,7 +115,7 @@ grunt release --no-write
 
 You'll see something like:
 ```
->> -------RELEASE DRY RUN-------
+>> Release dry run
 >> bumped version to 0.8.0
 >> staged package.json
 >> committed package.json
@@ -135,6 +135,8 @@ The following are all the release steps, you can disable any you need to:
   release: {
     options: {
       bump: false, //default: true
+      changelog: true, //default: false
+      changelogText: '<%= version %>\n', //default: '### <%= version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n'
       file: 'component.json', //default: package.json
       add: false, //default: true
       commit: false, //default: true
