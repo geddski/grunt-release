@@ -1,3 +1,4 @@
+* Update instructions for 'additionalFiles' usage
 * Support strings in `option.additionalFiles`
 * Update possibility to add a message in change log
 * Fix `Cannot read property 'options' of undefined`

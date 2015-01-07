@@ -97,14 +97,15 @@ Sometimes you may need to bump multiple files while releasing.
 ```js
   release: {
     options: {
-      additionalFiles: 'bower.json',
+      additionalFiles: ['bower.json']
     }
   }
 ```
 
-The version to bump is set in the master file defined with otpion 'file' (default : package.json).
-This version will be propagated to every additionalFiles.
+You can also provide multiple files in this array or provide a string with multiple file paths separated by comma (`,`).
 
+The version to bump is set in the master file defined with option 'file' (default : package.json).
+This version will be propagated to every additionalFiles.
 
 **Dry Run:**
 To see what grunt-release does, without really changing anything, use `--no-write` option.
