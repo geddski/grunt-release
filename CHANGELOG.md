@@ -1,3 +1,4 @@
+* Support strings in `option.additionalFiles`
 * Update possibility to add a message in change log
 * Fix `Cannot read property 'options' of undefined`
 * Prevent message when committing from stating `undefined`

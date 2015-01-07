@@ -18,9 +18,20 @@ module.exports = function(grunt){
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
       var newVersion = pkg.version;
+      var files;
 
       if (options.bump) {
         newVersion = semver.inc(pkg.version, type || 'patch');
+      }
+
+      // Check if options.additionalFiles is a single file
+      if (typeof options.additionalFiles === 'string') {
+        files = options.additionalFiles.split(',').map(function (value) {
+          return value.trim();
+        });
+
+        // You can also add a string with multiple files separated by `,`
+        options.additionalFiles = [].concat(files);
       }
 
       options.additionalFiles.push(file);
