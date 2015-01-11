@@ -62,7 +62,11 @@ module.exports = function(grunt){
       push: true,
       pushTags: true,
       npm: true,
-      remote: 'origin'
+      remote: 'origin',
+      beforeReleaseTasks: [],
+      afterReleaseTasks: [],
+      beforeBumpTasks: [],
+      afterBumpTasks: []
     }, (grunt.config.data[this.name] || {}).options);
     var config = setup(options.file, type);
 
@@ -238,8 +242,30 @@ module.exports = function(grunt){
       return deferred.promise;
     }
 
+    function runTasks(taskName) {
+      var map = {
+        beforeBump: 'beforeBumpTasks',
+        afterBump: 'afterBumpTasks',
+        beforeRelease: 'beforeReleaseTasks',
+        afterRelease: 'afterReleaseTasks'
+      };
+      return function () {
+        var method = map[taskName],
+          tasks = options[method];
+        if (tasks.length) {
+          grunt.log.ok('running ' + method + ' ');
+          if (!nowrite) {
+            grunt.task.run(tasks);
+          }
+        }
+      }
+    }
+
     new Q()
+      .then(ifEnabled('beforeBumpTasks', runTasks('beforeBump')))
       .then(ifEnabled('bump', bump))
+      .then(ifEnabled('afterBumpTasks', runTasks('afterBump')))
+      .then(ifEnabled('beforeReleaseTasks', runTasks('beforeRelease')))
       .then(ifEnabled('changelog', changelog))
       .then(ifEnabled('add', add))
       .then(ifEnabled('commit', commit))
@@ -248,6 +274,7 @@ module.exports = function(grunt){
       .then(ifEnabled('pushTags', pushTags))
       .then(ifEnabled('npm', publish))
       .then(ifEnabled('github', githubRelease))
+      .then(ifEnabled('afterReleaseTasks', runTasks('afterRelease')))
       .catch(function(msg){
         grunt.fail.warn(msg || 'release failed');
       })
