@@ -223,12 +223,14 @@ module.exports = function(grunt){
         .auth(process.env[options.github.usernameVar], process.env[options.github.passwordVar])
         .set('Accept', 'application/vnd.github.manifold-preview')
         .set('User-Agent', 'grunt-release')
-        .send({"tag_name": tagName, "name": tagMessage})
+        .send({
+          "tag_name": tagName,
+          "name": tagMessage
+        })
         .end(function(res){
           if (res.statusCode === 201){
             success();
-          }
-          else {
+          } else {
             deferred.reject('Error creating github release. Response: ' + res.text);
           }
         });
