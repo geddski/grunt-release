@@ -1,3 +1,4 @@
+### v0.10.0 - 2015-01-12
 * Update instructions for 'additionalFiles' usage
 * Support strings in `option.additionalFiles`
 * Update possibility to add a message in change log
