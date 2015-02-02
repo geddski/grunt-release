@@ -162,6 +162,7 @@ The following are all the release steps, you can disable any you need to:
       afterRelease: [], // optional grunt tasks to run after release is packaged
       updateVars: [], // optional grunt config objects to update (this will update/set the version property on the object specified)
       github: {
+        apiRoot: 'https://git.example.com/v3', // Default: https://github.com
         repo: 'geddski/grunt-release', //put your user/repo here
         accessTokenVar: 'GITHUB_ACCESS_TOKE', //ENVIRONMENT VARIABLE that contains GitHub Access Token
 
