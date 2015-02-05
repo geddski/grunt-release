@@ -13,8 +13,9 @@ module.exports = function(grunt) {
       options: {
         bump: true,
         file: 'package.json',
-        changelog: 'test/fixtures/_CHANGELOG.md',
+        changelog: 'CHANGELOG.md',
         changelogText: '### <%= version %>\n',
+        commitMessage: 'v<%= version %>',
         add: true,
         commit: true,
         tag: true,
