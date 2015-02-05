@@ -1,3 +1,4 @@
+* Feature: Add possibilitity to tag release as Github prerelease
 * Bugfix: Ensure before and after tasks run correctly
   (!) Please be sure to use beforeBump, afterBump, beforeRelease and
       afterRelease as documented in README.md.
