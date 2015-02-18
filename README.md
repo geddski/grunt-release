@@ -60,6 +60,11 @@ grunt release:minor
 grunt release:major
 ```
 
+**Specific Version Release:**
+```shell
+grunt release:1.2.3
+```
+
 **Pre-release**
 ```shell
 grunt release:prerelease

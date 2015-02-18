@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     clean: {
-      test: 'test/fixtures/_*.json'
+      test: 'test/fixtures/_*.{json,md}'
     },
     nodeunit: {
       tests: 'test/release_test.js'
@@ -30,6 +30,52 @@ module.exports = function(grunt) {
         }
       }
     },
+    releaseTest: {
+      options: {
+        bump: true,
+        add: false,
+        commit: false,
+        tag: false,
+        push: false,
+        pushTags: false,
+        npm: false,
+        npmtag: false,
+        github: false
+      },
+      general: {
+        options: {
+          file: 'test/fixtures/_component.json',
+          changelog: 'test/fixtures/_CHANGELOG.md',
+          additionalFiles: ['test/fixtures/_bower.json'],
+          changelogText: '### <%= version %>\n',
+          commitMessage: 'v<%= version %>'
+        }
+      },
+      absolute: {
+        args: ['1.2.3'],
+        options: {
+          file: 'test/fixtures/_bower-absolute.json'
+        }
+      },
+      patch: {
+        args: ['patch'],
+        options: {
+          file: 'test/fixtures/_component-patch.json'
+        }
+      },
+      minor: {
+        args: ['minor'],
+        options: {
+          file: 'test/fixtures/_component-minor.json'
+        }
+      },
+      major: {
+        args: ['major'],
+        options: {
+          file: 'test/fixtures/_component-major.json'
+        }
+      }
+    },
     setup: {
       test: {
         files: [{
@@ -41,6 +87,18 @@ module.exports = function(grunt) {
         },{
           src: 'test/fixtures/CHANGELOG.md',
           dest: 'test/fixtures/_CHANGELOG.md'
+        },{
+          src: 'test/fixtures/bower.json',
+          dest: 'test/fixtures/_bower-absolute.json'
+        },{
+          src: 'test/fixtures/component.json',
+          dest: 'test/fixtures/_component-patch.json'
+        },{
+          src: 'test/fixtures/component.json',
+          dest: 'test/fixtures/_component-minor.json'
+        },{
+          src: 'test/fixtures/component.json',
+          dest: 'test/fixtures/_component-major.json'
         }]
       }
     }
@@ -53,7 +111,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'clean',
     'setup',
-    'release',
+    'releaseTest',
     'nodeunit',
     'clean'
   ]);
@@ -62,16 +120,20 @@ module.exports = function(grunt) {
     this.files.forEach(function(f){
       grunt.file.copy(f.src, f.dest);
     });
-    grunt.config.set('release.options.file', 'test/fixtures/_component.json');
-    grunt.config.set('release.options.changelog', 'test/fixtures/_CHANGELOG.md');
-    grunt.config.set('release.options.changelogText', '### <%= version %>\n');
-    grunt.config.set('release.options.add', false);
-    grunt.config.set('release.options.commit', false);
-    grunt.config.set('release.options.tag', false);
-    grunt.config.set('release.options.push', false);
-    grunt.config.set('release.options.pushTags', false);
-    grunt.config.set('release.options.npm', false);
-    grunt.config.set('release.options.github', false);
-    grunt.config.set('release.options.additionalFiles', ['test/fixtures/_bower.json']);
+  });
+
+  grunt.registerMultiTask('releaseTest', function(){
+    var args = (this.data.args || []).join(':');
+
+    grunt.config.set('release', {});
+    grunt.config.merge({
+      release: grunt.config.data[this.name]
+    });
+
+    grunt.config.merge({
+      release: grunt.config.data[this.name][this.target]
+    });
+
+    grunt.task.run('release' + (args && ':' + args));
   });
 };

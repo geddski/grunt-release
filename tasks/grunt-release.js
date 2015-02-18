@@ -21,7 +21,11 @@ module.exports = function(grunt){
       var files;
 
       if (options.bump) {
-        newVersion = semver.inc(pkg.version, type || 'patch');
+        if (semver.valid(type)) {
+          newVersion = type;
+        } else {
+          newVersion = semver.inc(pkg.version, type || 'patch');
+        }
       }
 
       // Check if options.additionalFiles is a single file

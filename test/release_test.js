@@ -2,26 +2,33 @@
 
 var grunt = require('grunt');
 
+function compareFiles(test, filename, description) {
+  var actual = grunt.file.read('test/fixtures/_' + filename);
+  var expected = grunt.file.read('test/expected/' + filename);
+  test.equal(actual, expected, description);
+  test.done();
+}
+
 exports.release = {
   bump: function(test){
-    test.expect(1);
-
-    var actual = grunt.file.readJSON('test/fixtures/_component.json');
-    var expected = grunt.file.readJSON('test/expected/component.json');
-    test.equal(actual.version, expected.version, 'should set version 0.0.13');
-
-    test.done();
+    compareFiles(test, 'component.json', 'should set version 0.0.13');
   },
   bumpMultiple: function(test){
-    var actual = grunt.file.readJSON('test/fixtures/_bower.json');
-    var expected = grunt.file.readJSON('test/expected/bower.json');
-    test.equal(actual.version, expected.version, 'bower.json should also have version 0.0.13');
-    test.done();
+    compareFiles(test, 'bower.json', 'bower.json should also have version 0.0.13');
   },
   bumpChangelog: function(test){
-    var actual = grunt.file.read('test/fixtures/_CHANGELOG.md');
-    var expected = grunt.file.read('test/expected/CHANGELOG.md');
-    test.equal(actual, expected, 'CHANGELOG.md should be updated');
-    test.done();
+    compareFiles(test, 'CHANGELOG.md', 'CHANGELOG.md should be updated');
+  },
+  bumpAbsolute: function(test){
+    compareFiles(test, 'bower-absolute.json', 'should set absolute version');
+  },
+  bumpPatch: function(test){
+    compareFiles(test, 'component-patch.json', 'should bump patch version');
+  },
+  bumpMinor: function(test){
+    compareFiles(test, 'component-minor.json', 'should bump minor version');
+  },
+  bumpMajor: function(test){
+    compareFiles(test, 'component-major.json', 'should bump major version');
   }
 };
