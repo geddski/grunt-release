@@ -1,3 +1,7 @@
+* Bugfix: Ensure before and after tasks run correctly
+  (!) Please be sure to use beforeBump, afterBump, beforeRelease and
+      afterRelease as documented in README.md.
+
 ### v0.11.0 - 2015-02-05
 * Adding custom tasks to run before or after bump and release
 

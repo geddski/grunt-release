@@ -243,29 +243,22 @@ module.exports = function(grunt){
     }
 
     function runTasks(taskName) {
-      var map = {
-        beforeBump: 'beforeBumpTasks',
-        afterBump: 'afterBumpTasks',
-        beforeRelease: 'beforeReleaseTasks',
-        afterRelease: 'afterReleaseTasks'
-      };
-      return function () {
-        var method = map[taskName],
-          tasks = options[method];
+      var tasks = options[taskName];
+      return Q.fcall(function () {
         if (tasks.length) {
-          grunt.log.ok('running ' + method + ' ');
+          grunt.log.ok('running ' + taskName + ' ');
           if (!nowrite) {
             grunt.task.run(tasks);
           }
         }
-      }
+      });
     }
 
     new Q()
-      .then(ifEnabled('beforeBumpTasks', runTasks('beforeBump')))
+      .then(ifEnabled('beforeBump', runTasks('beforeBump')))
       .then(ifEnabled('bump', bump))
-      .then(ifEnabled('afterBumpTasks', runTasks('afterBump')))
-      .then(ifEnabled('beforeReleaseTasks', runTasks('beforeRelease')))
+      .then(ifEnabled('afterBump', runTasks('afterBump')))
+      .then(ifEnabled('beforeRelease', runTasks('beforeRelease')))
       .then(ifEnabled('changelog', changelog))
       .then(ifEnabled('add', add))
       .then(ifEnabled('commit', commit))
@@ -274,7 +267,7 @@ module.exports = function(grunt){
       .then(ifEnabled('pushTags', pushTags))
       .then(ifEnabled('npm', publish))
       .then(ifEnabled('github', githubRelease))
-      .then(ifEnabled('afterReleaseTasks', runTasks('afterRelease')))
+      .then(ifEnabled('afterRelease', runTasks('afterRelease')))
       .catch(function(msg){
         grunt.fail.warn(msg || 'release failed');
       })
