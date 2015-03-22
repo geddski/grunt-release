@@ -1,3 +1,5 @@
+* Update node modules to latest versions
+
 ### 0.12.0
 * Add support to release specific versions (#108)
 * Feature: Add possibilitity to tag release as Github prerelease (#104)

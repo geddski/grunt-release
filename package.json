@@ -23,10 +23,10 @@
   "author": "Dave Geddes",
   "license": "MIT",
   "dependencies": {
-    "shelljs": "^0.3.0",
-    "semver": "^4.1.0",
-    "superagent": "^0.21.0",
-    "q": "^1.1.2"
+    "shelljs": "^0.4.0",
+    "semver": "^4.3.1",
+    "superagent": "^1.1.0",
+    "q": "^1.2.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
