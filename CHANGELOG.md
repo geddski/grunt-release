@@ -1,6 +1,6 @@
-* Add support to release specific versions
-* Feature: Add possibilitity to tag release as Github prerelease
-* Bugfix: Ensure before and after tasks run correctly
+* Add support to release specific versions (#108)
+* Feature: Add possibilitity to tag release as Github prerelease (#104)
+* Bugfix: Ensure before and after tasks run correctly (#105)
   (!) Please be sure to use beforeBump, afterBump, beforeRelease and
       afterRelease as documented in README.md.
 
