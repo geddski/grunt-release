@@ -1,3 +1,4 @@
+* Add support to update config variables with release
 * Update node modules to latest versions
 
 ### 0.12.0

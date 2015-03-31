@@ -38,10 +38,19 @@ module.exports = function(grunt){
         options.additionalFiles = [].concat(files);
       }
 
+      if (typeof options.updateVars === 'string') {
+        vars = options.updateVars.split(',').map(function (value) {
+          return value.trim();
+        });
+
+        options.updateVars = [].concat(vars);
+      }
+
       options.additionalFiles.push(file);
 
       return {
         files: options.additionalFiles,
+        vars: options.updateVars,
         newVersion: newVersion,
         pkg: pkg
       };
@@ -60,6 +69,8 @@ module.exports = function(grunt){
 
       // additionalFiles are additional files that also need to be bumped
       additionalFiles: [],
+      // updateVars are grunt variables that also need to be bumped
+      updateVars: [],
       add: true,
       commit: true,
       tag: true,
@@ -196,8 +207,16 @@ module.exports = function(grunt){
     }
 
     function bump(){
-      var i, file, pkg, promise;
-      var promises = [];
+      var i, file, pkg, promise, variable,
+        promises = [];
+
+      if (config.vars.length > 0) {
+        for(i = 0; i < config.vars.length; i++) {
+          variable = config.vars[i];
+          grunt.config(variable + '.version', config.newVersion);
+        }
+      }
+
       for (i = 0; i < config.files.length; i++) {
         file = config.files[i];
         promise = (function(file){
