@@ -272,14 +272,21 @@ module.exports = function(grunt){
 
     function runTasks(taskName) {
       var tasks = options[taskName];
-      return Q.fcall(function () {
-        if (tasks.length) {
-          grunt.log.ok('running ' + taskName + ' ');
-          if (!nowrite) {
-            grunt.task.run(tasks);
+
+      var fn = function() {
+        return Q.fcall(function () {
+          if (tasks.length) {
+            grunt.log.ok('running ' + taskName + ' ');
+            if (!nowrite) {
+              for (var i = 0; i < tasks.length; i++) {
+                run('grunt ' + tasks[i], '-> ' + tasks[i]);
+              }
+            }
           }
-        }
-      });
+        });
+      };
+
+      return fn;
     }
 
     new Q()
