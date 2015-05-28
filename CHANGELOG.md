@@ -1,3 +1,4 @@
+* Fix GitHub release status check
 * Add Github auth token as variable
 * Add support to update config variables with release
 * Update node modules to latest versions

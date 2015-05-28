@@ -236,6 +236,7 @@ module.exports = function(grunt){
       var deferred = Q.defer();
       var username;
       var password;
+
       if (!!options.github.usernameVar && !!options.github.passwordVar) {
         username = process.env[options.github.usernameVar];
         password = process.env[options.github.passwordVar];
@@ -248,16 +249,20 @@ module.exports = function(grunt){
       } else if (!!options.github.accessTokenVar) {
         username = process.env[options.github.accessTokenVar];
         password = '';
+
+        if (!username) {
+          grunt.log.warn('Error: No access token for GitHub');
+        }
       } else {
         grunt.log.warn('Error: Please set GitHub Access Token or username and password');
       }
 
-      function success(){
+      function success () {
         grunt.log.ok('created ' + tagName + ' release on GitHub.');
         deferred.resolve();
       }
 
-      if (nowrite){
+      if (nowrite) {
         success();
         return;
       }
@@ -272,8 +277,8 @@ module.exports = function(grunt){
           name: tagMessage,
           prerelease: type === 'prerelease'
         })
-        .end(function(res){
-          if (res.statusCode === 201){
+        .end(function(err, res){
+          if (res && res.statusCode === 201) {
             success();
           } else {
             deferred.reject('Error creating GitHub release. Response: ' + res.text);
