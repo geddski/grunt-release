@@ -95,7 +95,7 @@ grunt release --npmtag canary
 NOTE: If the tag you pass is **true**, then the tag will be the *new* version number after the bump. Otherwise it will be the string you provided.
 
 
-**Bump multuple files at once**
+**Bump multiple files at once**
 
 Sometimes you may need to bump multiple files while releasing.
 
