@@ -1,3 +1,4 @@
+### 0.13.0 - 2015-06-19
 * Add Github Enterprise Option
 * Fix GitHub release status check
 * Add Github auth token as variable
