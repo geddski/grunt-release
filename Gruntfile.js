@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         bump: true,
         file: 'package.json',
         changelog: 'CHANGELOG.md',
-        changelogText: '### <%= version %>\n',
+        changelogText: '### <%= version %> - ' + grunt.template.today('yyyy-mm-dd') + '\n',
         commitMessage: 'v<%= version %>',
         add: true,
         commit: true,
