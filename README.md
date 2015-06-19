@@ -13,9 +13,9 @@ Releasing a new version of your killer Node/Bower/Component/JS lib looks somethi
 2. stage the package.json file's change.
 3. commit that change with a message like "release 0.6.22".
 4. create a new git tag for the release.
-5. push the changes out to github.
-6. also push the new tag out to github.
-7. create a .zip release on github.
+5. push the changes out to GitHub.
+6. also push the new tag out to GitHub.
+7. create a .zip release on GitHub.
 8. publish the new version to npm.
 
 Cool, right? No! What's wrong with you? Automate all that:
@@ -24,7 +24,7 @@ Cool, right? No! What's wrong with you? Automate all that:
 grunt release
 ```
 
-Done. No more github issues from angry people reminding you how often you forget to do one or more of the steps.
+Done. No more GitHub issues from angry people reminding you how often you forget to do one or more of the steps.
 
 ## Setup
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
@@ -163,8 +163,11 @@ The following are all the release steps, you can disable any you need to:
       updateVars: [], // optional grunt config objects to update (this will update/set the version property on the object specified)
       github: {
         repo: 'geddski/grunt-release', //put your user/repo here
-        usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
-        passwordVar: 'GITHUB_PASSWORD' //ENVIRONMENT VARIABLE that contains Github password
+        accessTokenVar: 'GITHUB_ACCESS_TOKE', //ENVIRONMENT VARIABLE that contains GitHub Access Token
+
+        // Or you can use username and password env variables, we discourage you to do so
+        usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains GitHub username
+        passwordVar: 'GITHUB_PASSWORD' //ENVIRONMENT VARIABLE that contains GitHub password
       }
     }
   }
@@ -172,10 +175,13 @@ The following are all the release steps, you can disable any you need to:
 
 If you want to use multiline commit messages just pass an array to the `commitMessage` option instead of a string.
 
-### Notes on Github Releases:
-1. Yes, you have to use environment variables. I would be a terrible person if I let you check in your username and password into your source code.
-2. The [Github Releases API](http://developer.github.com/v3/repos/releases/) is still unstable and may change in the future.
-3. You can use an [access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use) if you'd rather.
+### Notes on GitHub Releases:
+
+1. Yes, you have to use environment variables.
+2. The [GitHub Releases API](http://developer.github.com/v3/repos/releases/) is still unstable and may change in the future.
+3. You should use an environment variable to set an [access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use) and "link" it via `accessTokenVar`.
+4. You can use environment variables for username (referenced in `usernameVar`) and password (`passwordVar`).
+5. We don't encourage you to use username and password for the GitHub release.
 
 For node libs, leave `file` option blank as it will default to `package.json`. For Bower components, set it to `bower.json`.
 

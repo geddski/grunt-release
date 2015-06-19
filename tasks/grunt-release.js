@@ -234,9 +234,26 @@ module.exports = function(grunt){
 
     function githubRelease(){
       var deferred = Q.defer();
+      var username;
+      var password;
+      if (!!options.github.usernameVar && !!options.github.passwordVar) {
+        username = process.env[options.github.usernameVar];
+        password = process.env[options.github.passwordVar];
+
+        if (!username) {
+          grunt.log.warn('Error: No username for GitHub release');
+        } else if (!password) {
+          grunt.log.warn('Error: No password for GitHub release');
+        }
+      } else if (!!options.github.accessTokenVar) {
+        username = process.env[options.github.accessTokenVar];
+        password = '';
+      } else {
+        grunt.log.warn('Error: Please set GitHub Access Token or username and password');
+      }
 
       function success(){
-        grunt.log.ok('created ' + tagName + ' release on github.');
+        grunt.log.ok('created ' + tagName + ' release on GitHub.');
         deferred.resolve();
       }
 
@@ -245,13 +262,9 @@ module.exports = function(grunt){
         return;
       }
 
-      if (!process.env[options.github.usernameVar]) {
-        grunt.log.warn('Error: No username for GitHub release');
-      }
-
       request
         .post('https://api.github.com/repos/' + options.github.repo + '/releases')
-        .auth(process.env[options.github.usernameVar], process.env[options.github.passwordVar])
+        .auth(username, password)
         .set('Accept', 'application/vnd.github.manifold-preview')
         .set('User-Agent', 'grunt-release')
         .send({
@@ -263,7 +276,7 @@ module.exports = function(grunt){
           if (res.statusCode === 201){
             success();
           } else {
-            deferred.reject('Error creating github release. Response: ' + res.text);
+            deferred.reject('Error creating GitHub release. Response: ' + res.text);
           }
         });
 
