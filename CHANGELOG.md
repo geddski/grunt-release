@@ -1,3 +1,5 @@
+* Added declaration for undeclared "vars" variable
+
 ### 0.13.0 - 2015-06-19
 * Add Github Enterprise Option
 * Fix GitHub release status check
