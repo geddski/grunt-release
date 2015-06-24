@@ -1,4 +1,5 @@
-* Added declaration for undeclared "vars" variable
+* Fix runtime error due to trailing comma (#132)
+* Add declaration for undeclared "vars" variable
 
 ### 0.13.0 - 2015-06-19
 * Add Github Enterprise Option

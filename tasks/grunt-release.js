@@ -18,7 +18,7 @@ module.exports = function(grunt){
     function setup(file, type){
       var pkg = grunt.file.readJSON(file);
       var newVersion = pkg.version;
-      var files,
+      var files;
       var vars;
 
       if (options.bump) {
