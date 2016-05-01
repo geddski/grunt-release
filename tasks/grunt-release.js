@@ -215,12 +215,20 @@ module.exports = function(grunt) {
 
         function bump() {
             var i, file, pkg, promise, variable,
-                promises = [];
+                promises = [], configProp, fullProp;
 
             if (config.vars.length > 0) {
                 for (i = 0; i < config.vars.length; i++) {
                     variable = config.vars[i];
-                    grunt.config(variable + '.version', config.newVersion);
+                    configProp = grunt.config(variable);
+                    if (typeof configProp === 'object') {
+                        fullProp = variable + '.version';
+                        grunt.config(fullProp, config.newVersion);
+                    } else if (typeof configProp === 'string') {
+                        fullProp = configProp;
+                        grunt.config(fullProp, config.newVersion);
+                    }
+                    grunt.log.ok('bumped version of ' + fullProp + ' to ' + config.newVersion);
                 }
             }
 
