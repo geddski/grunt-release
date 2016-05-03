@@ -1,3 +1,4 @@
+### 0.13.1 - 2016-05-02
 * Fix runtime error due to trailing comma (#132)
 * Add declaration for undeclared "vars" variable
 
