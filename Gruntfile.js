@@ -46,8 +46,8 @@ module.exports = function(grunt) {
           file: 'test/fixtures/_component.json',
           changelog: 'test/fixtures/_CHANGELOG.md',
           additionalFiles: ['test/fixtures/_bower.json'],
-          changelogText: '### <%= version %>\n',
-          commitMessage: 'v<%= version %>'
+          changelogText: grunt.template.process('### <%= version %>\n', {data: {'version': '0.0.13'}}),
+          commitMessage: grunt.template.process('v<%= version %>', {data: {'version': '0.0.13'}})
         }
       },
       absolute: {
@@ -78,25 +78,25 @@ module.exports = function(grunt) {
     setup: {
       test: {
         files: [{
-          src: 'test/fixtures/component.json',
+          from: 'test/fixtures/component.json',
           dest: 'test/fixtures/_component.json'
         },{
-          src: 'test/fixtures/bower.json',
+          from: 'test/fixtures/bower.json',
           dest: 'test/fixtures/_bower.json'
         },{
-          src: 'test/fixtures/CHANGELOG.md',
+          from: 'test/fixtures/CHANGELOG.md',
           dest: 'test/fixtures/_CHANGELOG.md'
         },{
-          src: 'test/fixtures/bower.json',
+          from: 'test/fixtures/bower.json',
           dest: 'test/fixtures/_bower-absolute.json'
         },{
-          src: 'test/fixtures/component.json',
+          from: 'test/fixtures/component.json',
           dest: 'test/fixtures/_component-patch.json'
         },{
-          src: 'test/fixtures/component.json',
+          from: 'test/fixtures/component.json',
           dest: 'test/fixtures/_component-minor.json'
         },{
-          src: 'test/fixtures/component.json',
+          from: 'test/fixtures/component.json',
           dest: 'test/fixtures/_component-major.json'
         }]
       }
@@ -117,7 +117,7 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('setup', 'Setup test fixtures', function(){
     this.files.forEach(function(f){
-      grunt.file.copy(f.src, f.dest);
+      grunt.file.copy(f.from, f.dest);
     });
   });
 
