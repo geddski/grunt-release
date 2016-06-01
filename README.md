@@ -176,6 +176,26 @@ The following are all the release steps, you can disable any you need to:
 
 If you want to use multiline commit messages just pass an array to the `commitMessage` option instead of a string.
 
+### Notes on queued tasks
+By default, the queued tasks ran through the `beforeBump`, `afterBump`, `beforeRelease`, `afterRelease` options will *not* inherit the flags specified when the `release` task is ran. To preserve those flags, you can optionally pass an object to those arrays in the following format:
+
+```js
+{
+   name: 'taskName',
+   preserveFlags: true // defaults to false
+}
+```
+
+You can still pass only strings to that array, or mix the two as need be. For example:
+
+```js
+  release: {
+    options: {
+      beforeRelease: ['oneTask', { name: 'anotherTask', preserveFlags: true }]
+    }
+  }
+```
+
 ### Notes on GitHub Releases:
 
 1. Yes, you have to use environment variables.
