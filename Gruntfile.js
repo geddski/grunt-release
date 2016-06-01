@@ -47,7 +47,8 @@ module.exports = function(grunt) {
           changelog: 'test/fixtures/_CHANGELOG.md',
           additionalFiles: ['test/fixtures/_bower.json'],
           changelogText: '### <%= version %>\n',
-          commitMessage: 'v<%= version %>'
+          commitMessage: 'v<%= version %>',
+          beforeRelease: ['dummyBefore', { name: 'dummyBefore', preserveFlags: true }]
         }
       },
       absolute: {
@@ -114,6 +115,18 @@ module.exports = function(grunt) {
     'nodeunit',
     'clean'
   ]);
+  
+  grunt.registerTask('dummyBefore', function(){
+    var flags = grunt.option.flags().join(' ');
+    var filePath = 'test/fixtures/_dummyBefore.json';
+    var contents = grunt.file.exists(filePath) ? grunt.file.readJSON(filePath) : { timesCalled: 0, flags: [] };
+    var updatedObject = {
+      timesCalled: contents.timesCalled+1,
+      flags: flags.length ? contents.flags.concat(flags) : contents.flags
+    };
+    
+    grunt.file.write(filePath, JSON.stringify(updatedObject));
+  });
 
   grunt.registerMultiTask('setup', 'Setup test fixtures', function(){
     this.files.forEach(function(f){
@@ -124,6 +137,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('releaseTest', function(){
     var args = (this.data.args || []).join(':');
 
+    grunt.option.init({ flag: 'test' });
     grunt.config.set('release', {});
     grunt.config.merge({
       release: grunt.config.data[this.name]
