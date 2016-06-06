@@ -305,34 +305,33 @@ module.exports = function(grunt) {
 
         function runTasks(taskName) {
             var tasks = options[taskName];
+            var promises = [];
             var flags = grunt.option.flags().join(' ');
             var msg;
 
-            var fn = function() {
-                return Q.fcall(function() {
-                    if (tasks.length) {
-                        grunt.log.ok('running ' + taskName + ' ');
+            if (Array.isArray(tasks) && tasks.length) {
+                grunt.log.ok('running ' + taskName + ' ');
 
-                        if(flags.length) {
-                          grunt.log.ok('-> current flags: ' + flags);
-                        }
+				if(flags.length) {
+                	grunt.log.ok('-> current flags: ' + flags);
+                }
 
-                        if (!nowrite) {
-                            for (var i = 0; i < tasks.length; i++) {
-                                if(typeof tasks[i] === 'string' || !tasks[i].preserveFlags){
-                                    msg = '-> ' + tasks[i] + (flags.length ? ' (ignoring current flags)' : '');
-                                    run('grunt ' + tasks[i], msg);
-                                }
-                                else if (tasks[i].preserveFlags){
-                                    run('grunt ' + tasks[i].name + ' ' + flags, '-> ' + tasks[i].name + ' ' + flags);
-                                }
+                if (!nowrite) {
+                    for (var i = 0; i < tasks.length; i++) {
+                        for (var i = 0; i < tasks.length; i++) {
+                        	if(typeof tasks[i] === 'string' || !tasks[i].preserveFlags){
+                            	msg = '-> ' + tasks[i] + (flags.length ? ' (ignoring current flags)' : '');
+                                promises.push(run('grunt ' + tasks[i], msg));
+                            }
+                            else if (tasks[i].preserveFlags){
+                            	promises.push(run('grunt ' + tasks[i].name + ' ' + flags, '-> ' + tasks[i].name + ' ' + flags));
                             }
                         }
                     }
-                });
-            };
+                }
+            }
 
-            return fn;
+            return Q.all(promises);
         }
 
         new Q()
