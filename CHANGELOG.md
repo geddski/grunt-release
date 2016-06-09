@@ -1,5 +1,8 @@
 ### 0.14.0 - 2016-06-08
-### 0.13.2 - 2016-06-08
+* Fix out of date dependencies (#151)
+* Fix grunt task run fail handling (#155)
+* runTasks (beforeRelease, afterRelease, etc.) ignores --gruntfile and --base (#147)
+
 ### 0.13.1 - 2016-05-02
 * Fix runtime error due to trailing comma (#132)
 * Add declaration for undeclared "vars" variable
