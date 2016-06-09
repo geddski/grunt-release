@@ -30,5 +30,13 @@ exports.release = {
   },
   bumpMajor: function(test){
     compareFiles(test, 'component-major.json', 'should bump major version');
+  },
+  preserveFlags: function(test){
+    var beforeTask = grunt.file.readJSON('test/fixtures/_dummyBefore.json');
+    
+    test.equal(beforeTask.timesCalled, 2);
+    test.equal(beforeTask.flags.length, 1);
+    test.equal(beforeTask.flags[0], '--flag=test');
+    test.done();
   }
 };
