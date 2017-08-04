@@ -335,10 +335,10 @@ module.exports = function(grunt) {
         }
 
         new Q()
-            .then(ifEnabled('beforeBump', runTasks('beforeBump')))
+            .then(ifEnabled('beforeBump', runTasks.bind(null, 'beforeBump')))
             .then(ifEnabled('bump', bump))
-            .then(ifEnabled('afterBump', runTasks('afterBump')))
-            .then(ifEnabled('beforeRelease', runTasks('beforeRelease')))
+            .then(ifEnabled('afterBump', runTasks.bind(null, 'afterBump')))
+            .then(ifEnabled('beforeRelease', runTasks.bind(null, 'beforeRelease')))
             .then(ifEnabled('changelog', changelog))
             .then(ifEnabled('add', add))
             .then(ifEnabled('commit', commit))
@@ -347,7 +347,7 @@ module.exports = function(grunt) {
             .then(ifEnabled('pushTags', pushTags))
             .then(ifEnabled('npm', publish))
             .then(ifEnabled('github', githubRelease))
-            .then(ifEnabled('afterRelease', runTasks('afterRelease')))
+            .then(ifEnabled('afterRelease', runTasks.bind(null, 'afterRelease')))
             .catch(function(msg) {
                 grunt.fail.warn(msg || 'release failed');
             })
