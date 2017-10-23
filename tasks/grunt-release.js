@@ -83,6 +83,7 @@ module.exports = function(grunt) {
             pushTags: true,
             npm: true,
             remote: 'origin',
+            draft: false,
             beforeReleaseTasks: [],
             afterReleaseTasks: [],
             beforeBumpTasks: [],
@@ -290,6 +291,7 @@ module.exports = function(grunt) {
                 .send({
                     'tag_name': tagName,
                     name: tagMessage,
+                    draft: options.draft,
                     prerelease: type === 'prerelease'
                 })
                 .end(function(err, res) {
